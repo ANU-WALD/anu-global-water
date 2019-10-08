@@ -1,0 +1,29 @@
+
+<mat-toolbar color="primary">
+    <button mat-icon-button (click)="drawer_left.toggle()">
+        <mat-icon class="mdi mdi-page-layout-sidebar-left" aria-label="toggle left panel"></mat-icon>
+    </button>
+    <span style="margin: 0 auto;">ANU Water Monitor</span>
+    <button mat-icon-button (click)="drawer_right.toggle()">
+        <mat-icon class="mdi mdi-page-layout-sidebar-right" aria-label="toggle right panel"></mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-drawer-container [hasBackdrop]="false">
+    <mat-drawer #drawer_left [mode]="'over'" position="start">
+        <app-left-panel (cmdEvent)="exe_cmd($event)" [DAT]="DAT"></app-left-panel>
+    </mat-drawer>
+
+    <mat-drawer-content>
+        <div id="map" style="height: 95vh; display: block; margin: 0; padding: 0; !important;"></div>
+    </mat-drawer-content>
+
+    <mat-drawer #drawer_right [mode]="'over'" position="end">
+        <app-right-panel></app-right-panel>
+    </mat-drawer>
+</mat-drawer-container>
+
+
+
+
+

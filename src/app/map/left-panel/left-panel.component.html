@@ -1,0 +1,75 @@
+<!--<mat-checkbox-->
+<!--        [(ngModel)]="is_selected"-->
+<!--        (change)="on_change(is_selected)">test-->
+<!--</mat-checkbox>-->
+
+
+<div style="margin: 5px;">
+
+
+    <mat-card>
+
+        <mat-card-subtitle>
+            Map Tools
+        </mat-card-subtitle>
+
+        <mat-card-content>
+            <button mat-icon-button (click)="pass_cmd({func: 'zoom_in', params: {}})">
+                <mat-icon aria-label="zoom in">zoom_in</mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="pass_cmd({func: 'zoom_out', params: {}})">
+                <mat-icon aria-label="zoom out">zoom_out</mat-icon>
+            </button>
+        </mat-card-content>
+
+
+    </mat-card>
+
+    <mat-card>
+        <mat-card-subtitle>
+            WMS layers
+        </mat-card-subtitle>
+
+        <mat-card-content>
+            <div *ngFor="let wms_item of DAT.WMS_layers | keyvalue">
+
+                <mat-checkbox
+                        [(ngModel)]="wms_item.value.is_selected"
+                        (change)="pass_cmd({
+                                func: 'set_wms_layer',
+                                params: {group_name: 'base_maps', layer_name: wms_item.key}})">{{wms_item.value.layer_display_name}}
+                </mat-checkbox>
+
+            </div>
+
+        </mat-card-content>
+
+    </mat-card>
+
+
+    <mat-card>
+
+        <mat-card-subtitle>
+            Base Layers
+        </mat-card-subtitle>
+
+        <mat-card-content>
+            <mat-radio-group [(ngModel)]="DAT.base_layer_name"
+                             (change)="pass_cmd({func: 'set_base_map', params: {base_layer: DAT.base_layer_name}})"
+                             aria-label="Select an option"
+                             style="display: flex; flex-direction: column;">
+                <mat-radio-button value="Satellite">Satellite</mat-radio-button>
+                <mat-radio-button value="Streets">Streets</mat-radio-button>
+                <mat-radio-button value="Dark">Dark</mat-radio-button>
+                <mat-radio-button value="Light">Light</mat-radio-button>
+            </mat-radio-group>
+        </mat-card-content>
+
+    </mat-card>
+
+
+</div>
+
+
+<!---->
