@@ -13,6 +13,10 @@ import {MatSliderModule} from '@angular/material/slider';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatCardModule} from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatInputModule} from '@angular/material/input';
+import {MatNativeDateModule} from '@angular/material/core';
 
 import {AppComponent} from './app.component';
 import {MapComponent} from './map/map.component';
@@ -20,7 +24,6 @@ import {MapComponent} from './map/map.component';
 import {FormsModule} from '@angular/forms';
 import {LeftPanelComponent} from './map/left-panel/left-panel.component';
 import {RightPanelComponent} from './map/right-panel/right-panel.component';
-
 
 @NgModule({
     declarations: [
@@ -42,6 +45,10 @@ import {RightPanelComponent} from './map/right-panel/right-panel.component';
         MatCheckboxModule,
         MatRadioModule,
         MatCardModule,
+        MatFormFieldModule,
+        MatDatepickerModule,
+        MatInputModule,
+        MatNativeDateModule,
         FormsModule
     ],
     providers: [],

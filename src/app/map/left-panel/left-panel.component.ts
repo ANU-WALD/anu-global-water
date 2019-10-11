@@ -9,11 +9,13 @@ export class LeftPanelComponent implements OnInit {
 
     @Input() DAT = {
         base_layer_name: null,
-        WMS_layers: {}};
-    @Output() cmdEvent = new EventEmitter<object>();
+        WMS_layers: {},
+        WMS_layers_dynamic: {}
+    };
+    @Output() map_left_panel_event = new EventEmitter<object>();
 
-    pass_cmd(cmdObj) {
-        this.cmdEvent.emit(cmdObj);
+    map_left_panel_emit_out(emit_obj) {
+        this.map_left_panel_event.emit(emit_obj);
     }
 
     constructor() {

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {timeout} from 'rxjs/operators';
 
 declare let L;
+declare let jsdap;
 
 @Component({
     selector: 'app-map',
@@ -29,29 +29,6 @@ export class MapComponent implements OnInit {
 
         WMS_layers: { // WMS_layers.AUS_NSW_Cadastre_Lots.is_selected
             // base maps
-            AUS_NSW_Cadastre_Lots: {
-                group_name: 'base_maps',
-                group_display_name: 'Base Maps',
-                layer_name: 'AUS_NSW_Cadastre_Lots',
-                layer_display_name: 'NSW Cadastre - Lots',
-                wms_url: 'http://maps.six.nsw.gov.au/arcgis/services/public/NSW_Cadastre/MapServer/WMSServer?',
-                wms_options: {
-                    layers: '1',
-                    transparent: true,
-                    format: 'image/png',
-                },
-                crs: 'EPSG3857',
-                is_selected: false,
-                opacity: 0.5,
-                show_controls: false,
-                has_dates: false,
-                has_legend: true,
-                legend_url: 'images/legend_lots.png',
-                info: {
-                    title: 'NSW Cadastre Mayer',
-                    text: 'This layers shows lots from the The Digital Cadastral Database (DCDB) of NSW. Lot is a parcel of land created on a plan of subdivison or title e.g Lot 10 DP12345. For more information see https://www.spatial.nsw.gov.au/mapping_and_imagery/cadastral_data'
-                }
-            },
 
             AUS_GA_L8: {
                 group_name: 'base_maps',
@@ -78,71 +55,142 @@ export class MapComponent implements OnInit {
             },
 
             AUS_CLUM: {
-                    group_name: 'base_maps',
-                    group_display_name: 'Base Maps',
-                    layer_name: 'AUS_CLUM',
-                    layer_display_name: 'Land Use',
-                    wms_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/au/LandUse/clum_0917_reclass_50m.nc',
-                    wms_options: {
-                        layers: 'LandUse',
-                        transparent: true,
-                        format: 'image/png',
-                        version: '1.1.1',
-                        styles: 'boxfill/anu_wald_landuse',
-                        numcolorbands: '20',
-                        colorscalerange: '1,20',
-                        belowmincolor: 'transparent',
-                        abovemaxcolor: 'transparent'
-                    },
-                    crs: 'EPSG3857',
-                    is_selected: false,
-                    opacity: 0.5,
-                    show_controls: false,
-                    has_dates: false,
-                    has_legend: true,
-                    legend_url: 'images/legend_clum.png',
-                    info: {
-                        title: 'Catchment Scale Land Use of Australia',
-                        text: 'This dataset is the most current national compilation of catchment scale land use data for Australia (CLUM), as at September 2017. It replaces the Catchment Scale Land Use of Australia - Update May 2016 released in June 2016. It is a seamless raster dataset that combines land use data for all state and territory jurisdictions, compiled at a resolution of 50 metres by 50 metres. It has been compiled from vector land use datasets collected as part of state and territory mapping programs through the Australian Collaborative Land Use and Management Program (ACLUMP). Catchment scale land use data was produced by combining land tenure and other types of land use information, fine-scale satellite data and information collected in the field. The date of mapping (2003 to 2017) and scale of mapping (1:5 000 to 1:250 000) vary, reflecting the source data, capture date and scale. This information is provided in a supporting polygon dataset.'
-                    }
+                group_name: 'base_maps',
+                group_display_name: 'Base Maps',
+                layer_name: 'AUS_CLUM',
+                layer_display_name: 'Land Use',
+                wms_url: 'https://dapds00.nci.org.au/thredds/wms/ub8/au/LandUse/clum_0917_reclass_50m.nc',
+                wms_options: {
+                    layers: 'LandUse',
+                    transparent: true,
+                    format: 'image/png',
+                    version: '1.1.1',
+                    styles: 'boxfill/anu_wald_landuse',
+                    numcolorbands: '20',
+                    colorscalerange: '1,20',
+                    belowmincolor: 'transparent',
+                    abovemaxcolor: 'transparent'
                 },
+                crs: 'EPSG3857',
+                is_selected: false,
+                opacity: 0.5,
+                show_controls: false,
+                has_dates: false,
+                has_legend: true,
+                legend_url: 'images/legend_clum.png',
+                info: {
+                    title: 'Catchment Scale Land Use of Australia',
+                    text: 'This dataset is the most current national compilation of catchment scale land use data for Australia (CLUM), as at September 2017. It replaces the Catchment Scale Land Use of Australia - Update May 2016 released in June 2016. It is a seamless raster dataset that combines land use data for all state and territory jurisdictions, compiled at a resolution of 50 metres by 50 metres. It has been compiled from vector land use datasets collected as part of state and territory mapping programs through the Australian Collaborative Land Use and Management Program (ACLUMP). Catchment scale land use data was produced by combining land tenure and other types of land use information, fine-scale satellite data and information collected in the field. The date of mapping (2003 to 2017) and scale of mapping (1:5 000 to 1:250 000) vary, reflecting the source data, capture date and scale. This information is provided in a supporting polygon dataset.'
+                }
+            },
 
+        },
+
+        WMS_layers_dynamic: {
             GRAFS_API_analysis: {
-                    group_name: 'base_maps',
-                    group_display_name: 'Base Maps',
-                    layer_name: 'GRAFS_API_analysis',
-                    layer_display_name: 'GRAFS API analysis',
-                    wms_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/API_analysis_window_2019.nc',
-                    wms_options: {
-                        layers: 'API',
-                        transparent: true,
-                        format: 'image/png',
-                        version: '1.3.0',
-                        styles: 'boxfill/nrm_rainfall',
-                        // numcolorbands: '20',
-                        // colorscalerange: '1,20',
-                        // belowmincolor: 'transparent',
-                        // abovemaxcolor: 'transparent'
-                    },
-                    crs: 'EPSG3857',
-                    is_selected: false,
-                    opacity: 0.5,
-                    show_controls: false,
-                    has_dates: false,
-                    has_legend: true,
-                    legend_url: 'images/legend_clum.png',
-                    info: {
-                        title: 'Catchment Scale Land Use of Australia',
-                        text: 'This dataset is the most current national compilation of catchment scale land use data for Australia (CLUM), as at September 2017. It replaces the Catchment Scale Land Use of Australia - Update May 2016 released in June 2016. It is a seamless raster dataset that combines land use data for all state and territory jurisdictions, compiled at a resolution of 50 metres by 50 metres. It has been compiled from vector land use datasets collected as part of state and territory mapping programs through the Australian Collaborative Land Use and Management Program (ACLUMP). Catchment scale land use data was produced by combining land tenure and other types of land use information, fine-scale satellite data and information collected in the field. The date of mapping (2003 to 2017) and scale of mapping (1:5 000 to 1:250 000) vary, reflecting the source data, capture date and scale. This information is provided in a supporting polygon dataset.'
-                    }
+                group_name: 'dynamic_layers',
+                group_display_name: 'Dynamic Layers',
+                layer_name: 'GRAFS_API_analysis',
+                layer_display_name: 'API analysis',
+                wms_url: 'https://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/API_analysis_window_<<YEAR>>.nc',
+                wms_options: {
+                    layers: 'API',
+                    transparent: true,
+                    format: 'image/png',
+                    version: '1.3.0',
+                    styles: 'boxfill/nrm_rainfall',
                 },
-        }
+                crs: 'EPSG3857',
+                is_selected: false,
+                opacity: 0.5,
+                show_controls: false,
+                has_dates: false,
+                date_dict: {
+                    selected_date: null,
+                    min_year: 2014,
+                    min_date: null,
+                    max_date: null,
+                },
+                has_legend: false,
+                legend_url: null,
+                info: {
+                    title: '',
+                    text: ''
+                }
+            },
+            GRAFS_SWI_1m_analysis: {
+                group_name: 'dynamic_layers',
+                group_display_name: 'Dynamic Layers',
+                layer_name: 'GRAFS_SWI_1m_analysis',
+                layer_display_name: 'SWI 1m analysis',
+                wms_url: 'https://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/SWI_1m_analysis_window_<<YEAR>>.nc',
+                wms_options: {
+                    layers: 'wetness',
+                    transparent: true,
+                    format: 'image/png',
+                    version: '1.3.0',
+                    styles: 'boxfill/nrm_rainfall',
+                },
+                crs: 'EPSG3857',
+                is_selected: false,
+                opacity: 0.5,
+                show_controls: false,
+                has_dates: false,
+                date_dict: {
+                    selected_date: null,
+                    min_year: 2014,
+                    min_date: null,
+                    max_date: null,
+                },
+                has_legend: false,
+                legend_url: null,
+                info: {
+                    title: '',
+                    text: ''
+                }
+            },
+            Surface_Wetness_from_API_analysis: {
+                group_name: 'dynamic_layers',
+                group_display_name: 'Dynamic Layers',
+                layer_name: 'Surface_Wetness_from_API_analysis',
+                layer_display_name: 'Wetness from API analysis',
+                wms_url: 'https://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/Surface_Wetness_from_API_analysis_window_<<YEAR>>.nc',
+                wms_options: {
+                    layers: 'wetness',
+                    transparent: true,
+                    format: 'image/png',
+                    version: '1.3.0',
+                    styles: 'boxfill/nrm_rainfall',
+                },
+                crs: 'EPSG3857',
+                is_selected: false,
+                opacity: 0.5,
+                show_controls: false,
+                has_dates: false,
+                date_dict: {
+                    selected_date: null,
+                    min_year: 2014,
+                    min_date: null,
+                    max_date: null,
+                },
+                has_legend: false,
+                legend_url: null,
+                info: {
+                    title: '',
+                    text: ''
+                }
+            },
+
+
+        },
+
 
     };
     OBJ = {
         current_base_layer: null,
         map: null,
-        WMS_layers: {}
+        WMS_layers: {},
+        WMS_layers_dynamic: {},
     };
 
 
@@ -184,8 +232,39 @@ export class MapComponent implements OnInit {
             this.OBJ.WMS_layers[layer_dict.group_name].layers[layer_dict.layer_name].layer_obj.setOpacity(
                 layer_dict.opacity
             );
-            console.log(wms_key);
         }
+
+        // set last date for dynamic layers
+
+        let today = new Date();
+        let cur_year = today.getFullYear();
+        for (let wms_key in this.DAT.WMS_layers_dynamic) {
+
+            this.OBJ.WMS_layers_dynamic[wms_key] = null;
+
+            let layer_dict = this.DAT.WMS_layers_dynamic[wms_key];
+            let wms_url = null;
+            let dods_url = null;
+            let min_year = layer_dict.date_dict.min_year;
+            // min date
+            wms_url = layer_dict.wms_url.replace('<<YEAR>>', min_year);
+            dods_url = wms_url.replace('/wms/', '/dodsC/') + '.dods';
+            jsdap.loadData(dods_url + '?time', function (js_data) {
+                let ts_arr = js_data[0];
+                layer_dict.date_dict.min_date = new Date(ts_arr[0] * 24 * 60 * 60 * 1000);
+            });
+
+            // max date
+            wms_url = layer_dict.wms_url.replace('<<YEAR>>', cur_year);
+            dods_url = wms_url.replace('/wms/', '/dodsC/') + '.dods';
+            jsdap.loadData(dods_url + '?time', function (js_data) {
+                let ts_arr = js_data[0];
+                layer_dict.date_dict.max_date = new Date(ts_arr[ts_arr.length - 1] * 24 * 60 * 60 * 1000);
+                layer_dict.date_dict.selected_date = layer_dict.date_dict.max_date;
+            });
+
+        }
+
 
     }
 
@@ -204,15 +283,12 @@ export class MapComponent implements OnInit {
 
     set_wms_layer(group_name, layer_name) {
 
-        console.log(layer_name, this.DAT.WMS_layers[layer_name].is_selected);
-
         if (this.DAT.WMS_layers[layer_name].is_selected) {
-            console.log('adding');
             this.OBJ.WMS_layers[group_name].layers[layer_name].layer_obj.addTo(this.OBJ.map);
             this.DAT.WMS_layers[layer_name].show_controls = true;
 
         } else {
-            console.log('removing');
+
             this.OBJ.map.removeLayer(this.OBJ.WMS_layers[group_name].layers[layer_name].layer_obj);
             this.DAT.WMS_layers[layer_name].show_controls = false;
         }
@@ -220,8 +296,33 @@ export class MapComponent implements OnInit {
 
     }
 
+    set_wms_layer_dynamic(layer_name) {
+        console.log('in map');
 
-    exe_cmd($event) {
+        if (this.DAT.WMS_layers_dynamic[layer_name].is_selected) {
+            console.log('selected');
+            let layer_date = this.DAT.WMS_layers_dynamic[layer_name].date_dict.selected_date;
+            console.log(layer_date);
+            layer_date = new Date(Date.UTC(layer_date.getFullYear(), layer_date.getMonth(), layer_date.getDate(), 0, 0, 0));
+
+            let wms_url = this.DAT.WMS_layers_dynamic[layer_name].wms_url.replace('<<YEAR>>', layer_date.getFullYear());
+            this.DAT.WMS_layers_dynamic[layer_name].wms_options.time = layer_date.toISOString();
+
+            this.OBJ.WMS_layers_dynamic[layer_name] = L.tileLayer.wms(wms_url, this.DAT.WMS_layers_dynamic[layer_name].wms_options);
+            this.OBJ.WMS_layers_dynamic[layer_name].addTo(this.OBJ.map);
+
+
+        } else {
+            console.log('not selected');
+            if (this.OBJ.WMS_layers_dynamic[layer_name] !== null) {
+                this.OBJ.map.removeLayer(this.OBJ.WMS_layers_dynamic[layer_name]);
+                this.DAT.WMS_layers_dynamic[layer_name].show_controls = false;
+            }
+        }
+    }
+
+
+    map_exe_cmd($event) {
 
         switch ($event.func) {
             case 'set_base_map':
@@ -235,6 +336,10 @@ export class MapComponent implements OnInit {
                 break;
             case 'set_wms_layer':
                 this.set_wms_layer($event.params.group_name, $event.params.layer_name);
+                break;
+            case 'set_wms_layer_dynamic':
+                this.set_wms_layer_dynamic($event.params.layer_name);
+
                 break;
             default:
                 break;

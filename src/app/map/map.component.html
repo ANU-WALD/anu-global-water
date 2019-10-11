@@ -11,7 +11,7 @@
 
 <mat-drawer-container [hasBackdrop]="false">
     <mat-drawer #drawer_left [mode]="'over'" position="start">
-        <app-left-panel (cmdEvent)="exe_cmd($event)" [DAT]="DAT"></app-left-panel>
+        <app-left-panel (map_left_panel_event)="map_exe_cmd($event)" [DAT]="DAT"></app-left-panel>
     </mat-drawer>
 
     <mat-drawer-content>
