@@ -200,7 +200,7 @@ export class MapComponent implements OnInit {
 
         this.OBJ.map = L.map('map', {
             continuousWorld: false, noWrap: true,
-        }).setView([this.DAT.map_init_lat,
+        } as L.MapOptions).setView([this.DAT.map_init_lat,
             this.DAT.map_init_lon], this.DAT.map_init_zoom);
 
         this.DAT.mapbox_baseLayers = {
