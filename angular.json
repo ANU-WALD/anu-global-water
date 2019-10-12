@@ -28,7 +28,6 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "src/assets/leaflet/leaflet.js",
               "src/assets/jsdap/jsdap-8.1.0.min.js"
             ]
           },

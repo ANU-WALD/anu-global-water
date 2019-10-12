@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import * as L from 'leaflet';
 
-declare let L;
 declare let jsdap;
 
 @Component({
