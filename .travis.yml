@@ -24,14 +24,14 @@ script:
 deploy:
 - skip_cleanup: true
   provider: script
-  script: cd dist/anu-global-water & scp -o StrictHostKeyChecking=no -i ../id_rsa_deploy -r . $FTP_USER@wenfo.org:/home/$FTP_USER/public_html/water/staging
+  script: cd dist/anu-global-water & scp -o StrictHostKeyChecking=no -i ../../id_rsa_deploy -r . $FTP_USER@wenfo.org:/home/$FTP_USER/public_html/water/staging
   on:
     branch: master
 
 # deploy to "wenfo.org/water" on branch production
 - skip_cleanup: true
   provider: script
-  script: cd dist/anu-global-water && scp -o StrictHostKeyChecking=no -i ../id_rsa_deploy -r . $FTP_USER@wenfo.org:/home/$FTP_USER/public_html/water
+  script: cd dist/anu-global-water && scp -o StrictHostKeyChecking=no -i ../../id_rsa_deploy -r . $FTP_USER@wenfo.org:/home/$FTP_USER/public_html/water
   on:
     branch: production
 
