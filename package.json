@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --port 9005",
+    "build": "if [ $BRANCH = 'production' ]; then export PREFIX='/water/'; else export PREFIX='/water/staging/'; fi; npm run build-with-prefix",
+    "build-with-prefix": "echo prefix=$PREFIX && ng build --base-href $PREFIX",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
