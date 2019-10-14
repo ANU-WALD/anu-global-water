@@ -10,8 +10,6 @@ declare let jsdap;
 })
 export class MapComponent implements OnInit {
 
-    public data_sent_to_child = 'ali';
-
     constructor() {
     }
 
