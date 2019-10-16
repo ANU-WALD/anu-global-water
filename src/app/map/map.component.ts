@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import * as L from 'leaflet';
-
-declare let jsdap;
+import {MetadataService, InterpolationService} from 'map-wald';
+import { forkJoin, Observable } from 'rxjs';
 
 @Component({
     selector: 'app-map',
@@ -10,8 +10,7 @@ declare let jsdap;
 })
 export class MapComponent implements OnInit {
 
-    constructor() {
-    }
+    constructor(private metadata: MetadataService) {}
 
     public DAT = {
         mapbox_token: 'pk.eyJ1IjoiZmFybWluZ2RzcyIsImEiOiJhNDVhOWY2MGIxMjgwYjI5OTdiOGRhMTM1NGE1YTFkYyJ9.cDFYFuz0wEbd0rxM-6djsw',
@@ -57,7 +56,7 @@ export class MapComponent implements OnInit {
                 group_display_name: 'Base Maps',
                 layer_name: 'AUS_CLUM',
                 layer_display_name: 'Land Use',
-                wms_url: 'https://dapds00.nci.org.au/thredds/wms/ub8/au/LandUse/clum_0917_reclass_50m.nc',
+                wms_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/au/LandUse/clum_0917_reclass_50m.nc',
                 wms_options: {
                     layers: 'LandUse',
                     transparent: true,
@@ -90,7 +89,7 @@ export class MapComponent implements OnInit {
                 group_display_name: 'Dynamic Layers',
                 layer_name: 'GRAFS_API_analysis',
                 layer_display_name: 'API analysis',
-                wms_url: 'https://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/API_analysis_window_<<YEAR>>.nc',
+                wms_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/API_analysis_window_{{year}}.nc',
                 wms_options: {
                     layers: 'API',
                     transparent: true,
@@ -121,7 +120,7 @@ export class MapComponent implements OnInit {
                 group_display_name: 'Dynamic Layers',
                 layer_name: 'GRAFS_SWI_1m_analysis',
                 layer_display_name: 'SWI 1m analysis',
-                wms_url: 'https://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/SWI_1m_analysis_window_<<YEAR>>.nc',
+                wms_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/SWI_1m_analysis_window_{{year}}.nc',
                 wms_options: {
                     layers: 'wetness',
                     transparent: true,
@@ -152,7 +151,7 @@ export class MapComponent implements OnInit {
                 group_display_name: 'Dynamic Layers',
                 layer_name: 'Surface_Wetness_from_API_analysis',
                 layer_display_name: 'Wetness from API analysis',
-                wms_url: 'https://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/Surface_Wetness_from_API_analysis_window_<<YEAR>>.nc',
+                wms_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/Surface_Wetness_from_API_analysis_window_{{year}}.nc',
                 wms_options: {
                     layers: 'wetness',
                     transparent: true,
@@ -245,30 +244,33 @@ export class MapComponent implements OnInit {
             let dods_url = null;
             let min_year = layer_dict.date_dict.min_year;
             // min date
-            wms_url = layer_dict.wms_url.replace('<<YEAR>>', min_year);
-            dods_url = wms_url.replace('/wms/', '/dodsC/') + '.dods';
-            jsdap.loadData(dods_url + '?time', function (js_data) {
-                let ts_arr = js_data[0];
-                layer_dict.date_dict.min_date = new Date(ts_arr[0] * 24 * 60 * 60 * 1000);
+            let datesMin$ = this.getDates(layer_dict.wms_url,{
+              year:min_year
+            });
+            let datesMax$ = this.getDates(layer_dict.wms_url,{
+              year:cur_year
             });
 
-            // max date
-            wms_url = layer_dict.wms_url.replace('<<YEAR>>', cur_year);
-            dods_url = wms_url.replace('/wms/', '/dodsC/') + '.dods';
-            jsdap.loadData(dods_url + '?time', function (js_data) {
-                let ts_arr = js_data[0];
-                layer_dict.date_dict.max_date = new Date(ts_arr[ts_arr.length - 1] * 24 * 60 * 60 * 1000);
-                layer_dict.date_dict.selected_date = layer_dict.date_dict.max_date;
-            });
+            forkJoin([datesMin$,datesMax$]).subscribe(allDates=>{
+              let mins = allDates[0];
+              let maxs = allDates[1];
+              layer_dict.date_dict.min_date = mins[0];
+              layer_dict.date_dict.max_date = maxs[maxs.length-1];
+              layer_dict.date_dict.selected_date = layer_dict.date_dict.max_date;
 
+            });
         }
 
 
     }
 
+    getDates(baseUrl:string,config):Observable<Date[]>{
+      const url = InterpolationService.interpolate(baseUrl,config);
+      const  dodsUrl = url.replace('/wms/', '/dodsC/');
+      return this.metadata.getTimeDimensionForURL(dodsUrl);
+    }
 
     set_base_map(base_layer) {
-
         this.DAT.base_layer_name = base_layer;
 
         this.OBJ.map.removeLayer(this.OBJ.current_base_layer);
@@ -303,7 +305,9 @@ export class MapComponent implements OnInit {
             console.log(layer_date);
             layer_date = new Date(Date.UTC(layer_date.getFullYear(), layer_date.getMonth(), layer_date.getDate(), 0, 0, 0));
 
-            let wms_url = this.DAT.WMS_layers_dynamic[layer_name].wms_url.replace('<<YEAR>>', layer_date.getFullYear());
+            let wms_url = InterpolationService.interpolate(this.DAT.WMS_layers_dynamic[layer_name].wms_url,{
+                year:layer_date.getFullYear()
+            });
             this.DAT.WMS_layers_dynamic[layer_name].wms_options.time = layer_date.toISOString();
 
             this.OBJ.WMS_layers_dynamic[layer_name] = L.tileLayer.wms(wms_url, this.DAT.WMS_layers_dynamic[layer_name].wms_options);
@@ -341,12 +345,6 @@ export class MapComponent implements OnInit {
                 break;
             default:
                 break;
-
-
         }
-
-
     }
-
-
 }

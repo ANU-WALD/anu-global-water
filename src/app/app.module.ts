@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
+import {MapWaldCoreModule} from 'map-wald';
 
 import {LayoutModule} from '@angular/cdk/layout';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -24,6 +24,7 @@ import {MapComponent} from './map/map.component';
 import {FormsModule} from '@angular/forms';
 import {LeftPanelComponent} from './map/left-panel/left-panel.component';
 import {RightPanelComponent} from './map/right-panel/right-panel.component';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 @NgModule({
     declarations: [
@@ -33,6 +34,7 @@ import {RightPanelComponent} from './map/right-panel/right-panel.component';
         RightPanelComponent
     ],
     imports: [
+        HttpClientModule,
         BrowserModule,
         BrowserAnimationsModule,
         LayoutModule,
@@ -49,7 +51,8 @@ import {RightPanelComponent} from './map/right-panel/right-panel.component';
         MatDatepickerModule,
         MatInputModule,
         MatNativeDateModule,
-        FormsModule
+        FormsModule,
+        MapWaldCoreModule.forRoot(null)
     ],
     providers: [],
     bootstrap: [AppComponent]
