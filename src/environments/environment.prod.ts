@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  tds:'http://dapds00.nci.org.au/thredds',
+  pointConfig:'assets/config/points.json'
 };

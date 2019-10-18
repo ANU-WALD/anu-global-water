@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  tds:'http://dapds00.nci.org.au/thredds',
+  pointConfig:'assets/config/points.json'
 };
 
 /*

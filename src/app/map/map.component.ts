@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import * as L from 'leaflet';
 import {MetadataService, InterpolationService} from 'map-wald';
 import { forkJoin, Observable } from 'rxjs';
+import { PointDataService } from '../point-data.service';
+import { Feature } from 'geojson';
 
 @Component({
     selector: 'app-map',
@@ -10,7 +12,9 @@ import { forkJoin, Observable } from 'rxjs';
 })
 export class MapComponent implements OnInit {
 
-    constructor(private metadata: MetadataService) {}
+    constructor(private metadata: MetadataService, private pointData: PointDataService) {
+      this.pointData.getLayers().subscribe(layers=>console.log(layers));
+    }
 
     public DAT = {
         mapbox_token: 'pk.eyJ1IjoiZmFybWluZ2RzcyIsImEiOiJhNDVhOWY2MGIxMjgwYjI5OTdiOGRhMTM1NGE1YTFkYyJ9.cDFYFuz0wEbd0rxM-6djsw',
@@ -185,7 +189,7 @@ export class MapComponent implements OnInit {
     };
     OBJ = {
         current_base_layer: null,
-        map: null,
+        map: null as L.Map,
         WMS_layers: {},
         WMS_layers_dynamic: {},
     };
@@ -261,6 +265,22 @@ export class MapComponent implements OnInit {
             });
         }
 
+        const pointLayer = 'Major streams';
+        this.pointData.getSites(pointLayer,{admin_country:'AUS'}).subscribe(features=>{
+          features.features.forEach(f=>{
+            const lyr = L.geoJSON(f,{
+              pointToLayer: (feature, latlng) => {
+                return L.circleMarker(latlng, {
+
+                });
+              }
+            });
+            lyr.on('click',(_)=>{
+              this.pointSelected(pointLayer,f);
+            });
+            lyr.addTo(this.OBJ.map);
+          });
+        });
 
     }
 
@@ -346,5 +366,13 @@ export class MapComponent implements OnInit {
             default:
                 break;
         }
+    }
+
+    pointSelected(layer:string,point:Feature){
+      console.log(layer,point);
+
+      this.pointData.getTimeSeries(layer,point).subscribe(ts=>{
+        console.log(ts);
+      })
     }
 }

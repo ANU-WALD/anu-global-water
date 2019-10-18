@@ -1,0 +1,25 @@
+[
+  {
+    "label":"Storages",
+    "filename":"ub8/global/GRALM/Global_Lake_and_Reservoir_Storage (1992-present).nc",
+    "meta":[
+
+    ],
+    "variables":[
+      "storage"
+    ],
+    "time":"time"
+  },
+  {
+    "label":"Major streams",
+    "filename":"ub8/global/GRALM/Global_River_Discharge_GSGR (2000-present).nc",
+    "meta":[
+      "Riv_Qmean",
+      "Riv_Qmax"
+    ],
+    "variables":[
+      "river_discharge"
+    ],
+    "time":"Time"
+  }
+]
