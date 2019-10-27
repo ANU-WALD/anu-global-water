@@ -18,8 +18,8 @@
         <div id="map" style="height: 95vh; display: block; margin: 0; padding: 0; !important;"></div>
     </mat-drawer-content>
 
-    <mat-drawer #drawer_right [mode]="'over'" position="end">
-        <app-right-panel></app-right-panel>
+    <mat-drawer #drawer_right [mode]="'over'" position="end" [(opened)]="DAT.gui_controls.nav_right.opened">
+        <app-right-panel [DAT]="DAT"></app-right-panel>
     </mat-drawer>
 </mat-drawer-container>
 
