@@ -21,7 +21,6 @@ export class MapComponent implements OnInit {
     this.pointData.getLayers().subscribe(layers => console.log(layers));
   }
 
-  // data dict
   public DAT = {
     mapbox_token: 'pk.eyJ1IjoiZmFybWluZ2RzcyIsImEiOiJhNDVhOWY2MGIxMjgwYjI5OTdiOGRhMTM1NGE1YTFkYyJ9.cDFYFuz0wEbd0rxM-6djsw',
     mapbox_baseLayers: {},
