@@ -23,6 +23,28 @@
     <mat-card style="margin-bottom: 5px;">
 
         <mat-card-subtitle>
+            Point layers
+        </mat-card-subtitle>
+
+        <mat-card-content>
+
+            <div *ngFor="let pnt_item of DAT.Point_layers | keyvalue; let pnt_i=index;">
+
+                <mat-checkbox
+                        [(ngModel)]="pnt_item.value.is_selected"
+                        (change)="map_left_panel_emit_out({
+                                func: 'set_point_layer',
+                                params: {layer_name: pnt_item.key}})">{{pnt_item.value.layer_display_name}}
+                </mat-checkbox>
+            </div>
+
+        </mat-card-content>
+
+    </mat-card>
+
+    <mat-card style="margin-bottom: 5px;">
+
+        <mat-card-subtitle>
             Dynamic layers
         </mat-card-subtitle>
 

@@ -1,4 +1,4 @@
-import {Component, Output, Input, EventEmitter, OnInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 
 @Component({
     selector: 'app-left-panel',
@@ -9,6 +9,7 @@ export class LeftPanelComponent implements OnInit {
 
     @Input() DAT = {
         base_layer_name: null,
+        Point_layers: {},
         WMS_layers: {},
         WMS_layers_dynamic: {}
     };
