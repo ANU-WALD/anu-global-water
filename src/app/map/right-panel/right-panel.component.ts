@@ -10,7 +10,23 @@ declare let Plotly;
   templateUrl: './right-panel.component.html',
   styleUrls: ['./right-panel.component.scss']
 })
+
+
 export class RightPanelComponent implements OnInit {
+
+  public selected_point = {
+    point: {
+      properties: {
+        ID: null,
+        admin_country: null,
+        admin_province: null,
+        hydro_basin: null,
+        hydro_cat: null,
+        Riv_Qmean: null,
+        Riv_Qmax: null
+      }
+    }
+  };
 
   @Input() DAT = {
     gui_controls: {nav_right: {opened: null}},
@@ -24,8 +40,13 @@ export class RightPanelComponent implements OnInit {
 
   ngOnInit() {
 
+
     this.subscription = this.plotDataService.cmdObservable$.subscribe((res) => {
       console.log('res++++', res);
+
+      this.selected_point = res.data;
+      console.log(this.selected_point);
+
       let div_id = 'plotly_ts';
 
       let plot_data = [{
@@ -103,5 +124,6 @@ export class RightPanelComponent implements OnInit {
 
 
   }
+
 
 }

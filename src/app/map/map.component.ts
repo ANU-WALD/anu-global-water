@@ -21,7 +21,6 @@ export class MapComponent implements OnInit {
     this.pointData.getLayers().subscribe(layers => console.log(layers));
   }
 
-  public test = null;
   public DAT = {
     mapbox_token: 'pk.eyJ1IjoiZmFybWluZ2RzcyIsImEiOiJhNDVhOWY2MGIxMjgwYjI5OTdiOGRhMTM1NGE1YTFkYyJ9.cDFYFuz0wEbd0rxM-6djsw',
     mapbox_baseLayers: {},
@@ -233,7 +232,6 @@ export class MapComponent implements OnInit {
       },
     },
 
-    plot_data: {dates: [], values: []},
     gui_controls: {
       nav_left: {
         opened: true,
@@ -322,10 +320,12 @@ export class MapComponent implements OnInit {
       });
     }
 
+    // adding point layers to the system
     for (let layer_key in this.DAT.Point_layers) {
       console.log('layer_key', layer_key);
       const pointLayer = this.DAT.Point_layers[layer_key].layer_display_name; // 'Major streams';
-      this.pointData.getSites(pointLayer, {admin_country: 'AUS'}).subscribe(features => {
+      // this.pointData.getSites(pointLayer, {admin_country: 'AUS'}).subscribe(features => {
+      this.pointData.getSites(pointLayer).subscribe(features => {
 
         this.OBJ.Point_layers[layer_key] = [];
         let cnt = -1;
@@ -454,32 +454,21 @@ export class MapComponent implements OnInit {
   }
 
   pointSelected(layer: string, point: Feature) {
-    console.log(layer, point);
+    console.log('in pointSelected');
+    console.log(layer);
+    console.log(point);
+    console.log('----------------------');
+
 
     this.pointData.getTimeSeries(layer, point).subscribe(ts => {
       console.log(ts);
 
-      this.DAT.plot_data = ts;
-
-      let ts2 = {
-        dates: [],
-        values: []
-      };
-
-      for (let dt_index in ts.dates) {
-
-        let dt = String(ts.dates[dt_index]);
-        let dt_y = parseInt(dt.slice(0, 4));
-        let dt_m = parseInt(dt.slice(4, 6));
-        let dt_d = parseInt(dt.slice(6));
-
-        let date_obj = new Date(dt_y, dt_m, dt_d);
-
-        ts2.dates.push(date_obj);
-        ts2.values.push(ts.values[dt_index]);
-      }
-
-      this.plotData.sendCmd({data: ts2});
+      this.plotData.sendCmd({data: {
+        layer: layer,
+        point: point,
+        dates: ts.dates,
+        values: ts.values
+      }});
 
     });
   }

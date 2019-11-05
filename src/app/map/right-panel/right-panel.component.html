@@ -1,6 +1,38 @@
-
 <!--<mat-slider min="1" max="5" step="0.5" value="1.5"></mat-slider>-->
-<div style="margin-top: 20px; margin-bottom: 20px;">
+
+<mat-card style="margin-bottom: 5px;">
+
+  <mat-card-subtitle>
+    Time series plot for selected point
+  </mat-card-subtitle>
+
+  <mat-card-content style="margin-top: 20px; margin-bottom: 20px;">
     <div id="plotly_ts" style="width:600px;height:250px;"></div>
-</div>
+  </mat-card-content>
+
+</mat-card>
+
+<mat-card style="margin-bottom: 5px;">
+
+  <mat-card-subtitle>
+    Selected point attributes
+  </mat-card-subtitle>
+
+  <mat-card-content style="margin-top: 20px; margin-bottom: 20px;">
+
+    <p>
+      Feature ID: {{ selected_point.point.properties.ID }} <br>
+      Country: {{ selected_point.point.properties.admin_country }} <br>
+      Province: {{ selected_point.point.properties.admin_province }} <br>
+      Hydro Basin: {{ selected_point.point.properties.hydro_basin }} <br>
+      Hydro Cat: {{ selected_point.point.properties.hydro_cat }} <br>
+      Mean Q: {{ selected_point.point.properties.Riv_Qmean | number: '1.0-2'}} <br>
+      Max Q: {{ selected_point.point.properties.Riv_Qmax | number: '1.0-2' }} <br>
+    </p>
+
+  </mat-card-content>
+
+</mat-card>
+
+
 
