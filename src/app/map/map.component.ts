@@ -3,7 +3,7 @@ import {forkJoin, Observable} from 'rxjs';
 import * as L from 'leaflet';
 import {Feature} from 'geojson';
 
-import {MetadataService, InterpolationService} from 'map-wald';
+import {MetadataService, InterpolationService, PaletteService} from 'map-wald';
 import {PointDataService} from '../point-data.service';
 import {PlotDataService} from '../plot-data.service';
 import {point} from 'leaflet';
@@ -18,7 +18,8 @@ export class MapComponent implements OnInit {
 
   constructor(private metadata: MetadataService,
               private pointData: PointDataService,
-              private plotData: PlotDataService) {
+              private plotData: PlotDataService,
+              private palettes: PaletteService) {
     this.pointData.getLayers().subscribe(layers => console.log(layers));
 
     this.pointData.getTimes('Major streams').pipe(
@@ -27,6 +28,10 @@ export class MapComponent implements OnInit {
       switchAll()
     ).subscribe(d=>{
       console.log(d);
+    });
+
+    this.palettes.getPalette('RdYlBu',false,7).subscribe(pal=>{
+      console.log(pal);
     });
   }
 
