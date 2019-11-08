@@ -7,6 +7,7 @@ import {MetadataService, InterpolationService} from 'map-wald';
 import {PointDataService} from '../point-data.service';
 import {PlotDataService} from '../plot-data.service';
 import {point} from 'leaflet';
+import { map, switchAll } from 'rxjs/operators';
 
 @Component({
   selector: 'app-map',
@@ -19,6 +20,14 @@ export class MapComponent implements OnInit {
               private pointData: PointDataService,
               private plotData: PlotDataService) {
     this.pointData.getLayers().subscribe(layers => console.log(layers));
+
+    this.pointData.getTimes('Major streams').pipe(
+      map(dates=>dates[dates.length-1]),
+      map(date=>this.pointData.getValues('Major streams',null,date)),
+      switchAll()
+    ).subscribe(d=>{
+      console.log(d);
+    });
   }
 
   public DAT = {

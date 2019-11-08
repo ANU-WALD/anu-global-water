@@ -68,6 +68,74 @@ export class PointDataService {
       }));
   }
 
+  getTimes(layer: string): Observable<Date[]> {
+    return this._layerConfig(layer).pipe(
+      map(cfg=>{
+        const url = `${environment.tds}/dodsC/${cfg.filename}`;
+        return this.metadata.getTimeDimensionForURL(url)
+      }),
+      switchAll()
+    );
+  }
+
+  getValues(layer:string, filter:{[key:string]:any}, timestep: Date, variable?: string): Observable<FeatureCollection>{
+    return forkJoin([
+      this.getSites(layer),
+      this._layerConfig(layer)
+    ]).pipe(
+      map(([f,c])=>{
+        let features:FeatureCollection = f;
+        let config:PointConfig = c;
+        variable = variable || config.variables[0];
+        return {
+          features,
+          variable,
+          config,
+          url: ''
+        };
+      }),
+      map(query=>{
+        query.url = `${environment.tds}/dodsC/${query.config.filename}`;
+        return forkJoin([
+          this.metadata.dasForUrl(query.url),
+          this.metadata.getTimeDimensionForURL(query.url),
+          of(query)
+        ]);
+      }),
+      switchAll(),
+      map(([das,timeDim,query])=>{
+        const featureRange = this.dap.dapRangeQuery(0,query.features.features.length-1);
+        const timeStepIdx = timeDim.indexOf(timestep);
+        if(timeStepIdx<0){
+          // Error
+        }
+        const timeQuery =  this.dap.dapRangeQuery(timeStepIdx)
+        return forkJoin([
+          this.dap.getData(`${query.url}.ascii?${query.variable}${featureRange}${timeQuery}`,das),
+          of(query)
+        ]);
+      }),
+      switchAll(),
+      map(([data,query])=>{
+        const vals = data[query.variable] as number[];
+        const result:FeatureCollection = {
+          type:'FeatureCollection',
+          features:[]
+        };
+        result.features = query.features.features.map(f=>{
+          const newF: Feature = {
+            type: 'Feature',
+            geometry:f.geometry,
+            properties:Object.assign({},f.properties)
+          };
+          const idx = (data.ID as number[]).indexOf(newF.properties.ID);
+          newF.properties.value = data[query.variable][idx];
+          return newF;
+        })
+        return result;
+      }));
+  }
+
   getTimeSeries(layer:string,feature:Feature,variable?:string):Observable<TimeSeries>{
     let res$ = forkJoin([
       this.getSites(layer),
