@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   tds:'http://dapds00.nci.org.au/thredds',
-  pointConfig:'assets/config/points.json'
+  pointConfig:'assets/config/points.json',
 };
 
 /*

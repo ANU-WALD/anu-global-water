@@ -22,8 +22,8 @@
 
     <p>
       Feature ID: {{ selected_point.point.properties.ID }} <br>
-      Country: {{ selected_point.point.properties.admin_country }} <br>
-      Province: {{ selected_point.point.properties.admin_province }} <br>
+      Country: {{ selected_point.info.country_name }} <br>
+      Province: {{ selected_point.info.state_name }} <br>
       Hydro Basin: {{ selected_point.point.properties.hydro_basin }} <br>
       Hydro Cat: {{ selected_point.point.properties.hydro_cat }} <br>
       Mean Q: {{ selected_point.point.properties.Riv_Qmean | number: '1.0-2'}} <br>

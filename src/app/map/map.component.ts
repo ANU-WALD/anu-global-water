@@ -7,7 +7,7 @@ import {MetadataService, InterpolationService, PaletteService} from 'map-wald';
 import {PointDataService} from '../point-data.service';
 import {PlotDataService} from '../plot-data.service';
 import {point} from 'leaflet';
-import { map, switchAll } from 'rxjs/operators';
+import {map, switchAll} from 'rxjs/operators';
 
 @Component({
   selector: 'app-map',
@@ -23,14 +23,14 @@ export class MapComponent implements OnInit {
     this.pointData.getLayers().subscribe(layers => console.log(layers));
 
     this.pointData.getTimes('Major streams').pipe(
-      map(dates=>dates[dates.length-1]),
-      map(date=>this.pointData.getValues('Major streams',null,date)),
+      map(dates => dates[dates.length - 1]),
+      map(date => this.pointData.getValues('Major streams', null, date)),
       switchAll()
-    ).subscribe(d=>{
+    ).subscribe(d => {
       console.log(d);
     });
 
-    this.palettes.getPalette('RdYlBu',false,7).subscribe(pal=>{
+    this.palettes.getPalette('RdYlBu', false, 7).subscribe(pal => {
       console.log(pal);
     });
   }
@@ -215,6 +215,10 @@ export class MapComponent implements OnInit {
           color: 'blue',
           radius: 5
         },
+        plot_config: {
+          'plot_title': 'Time Series of River Discharge',
+          'left_axis_title': 'River Discharge'
+        },
         show_controls: false,
         has_legend: false,
         legend_url: null,
@@ -234,6 +238,10 @@ export class MapComponent implements OnInit {
         style: {
           color: 'brown',
           radius: 7
+        },
+        plot_config: {
+          'plot_title': 'Time Series of Storage',
+          'left_axis_title': 'Storage'
         },
         show_controls: false,
         has_legend: false,
@@ -338,6 +346,7 @@ export class MapComponent implements OnInit {
     for (let layer_key in this.DAT.Point_layers) {
       console.log('layer_key', layer_key);
       const pointLayer = this.DAT.Point_layers[layer_key].layer_display_name; // 'Major streams';
+      const plot_config = this.DAT.Point_layers[layer_key].plot_config;
       // this.pointData.getSites(pointLayer, {admin_country: 'AUS'}).subscribe(features => {
       this.pointData.getSites(pointLayer).subscribe(features => {
 
@@ -351,7 +360,7 @@ export class MapComponent implements OnInit {
             }
           });
           lyr.on('click', (_) => {
-            this.pointSelected(pointLayer, f);
+            this.pointSelected(pointLayer, f, plot_config);
 
           });
           this.OBJ.Point_layers[layer_key].push(lyr);
@@ -467,22 +476,26 @@ export class MapComponent implements OnInit {
     }
   }
 
-  pointSelected(layer: string, point: Feature) {
+  pointSelected(layer: string, point: Feature, plot_config) {
     console.log('in pointSelected');
     console.log(layer);
     console.log(point);
     console.log('----------------------');
 
+    console.log('----------------------');
 
     this.pointData.getTimeSeries(layer, point).subscribe(ts => {
       console.log(ts);
 
-      this.plotData.sendCmd({data: {
-        layer: layer,
-        point: point,
-        dates: ts.dates,
-        values: ts.values
-      }});
+      this.plotData.sendCmd({
+        data: {
+          layer: layer,
+          plot_config: plot_config,
+          point: point,
+          dates: ts.dates,
+          values: ts.values
+        }
+      });
 
     });
   }

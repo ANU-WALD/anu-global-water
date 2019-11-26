@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {PlotDataService} from '../../plot-data.service';
+import admin_names from '../../../assets/names/admin_names.json';
 
 declare let Plotly;
 
@@ -15,6 +16,10 @@ declare let Plotly;
 export class RightPanelComponent implements OnInit {
 
   public selected_point = {
+    info: {
+      country_name: null,
+      state_name: null
+    },
     point: {
       properties: {
         ID: null,
@@ -35,6 +40,7 @@ export class RightPanelComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(private plotDataService: PlotDataService) {
+
   }
 
 
@@ -46,6 +52,14 @@ export class RightPanelComponent implements OnInit {
 
       this.selected_point = res.data;
       console.log(this.selected_point);
+      console.log(admin_names);
+      console.log();
+
+      let admin_info = admin_names[this.selected_point.point.properties.admin_country];
+      this.selected_point.info = {
+        country_name: admin_info.NAME_0,
+        state_name: admin_info.GID_1[this.selected_point.point.properties.admin_province]
+      };
 
       let div_id = 'plotly_ts';
 
@@ -59,7 +73,7 @@ export class RightPanelComponent implements OnInit {
       let layout = {
 
         title: {
-          text: 'Plot Title (TBD)',
+          text: res.data.plot_config.plot_title,
           // font: {
           //   family: 'Courier New, monospace',
           //   size: 12
@@ -99,7 +113,7 @@ export class RightPanelComponent implements OnInit {
           autorange: true,
           // range: [0, 100],
           title: {
-            text: 'Left axis title (TBD)',
+            text: res.data.plot_config.left_axis_title,
             // font: {
             //   family: 'Courier New, monospace',
             //   size: 10,
