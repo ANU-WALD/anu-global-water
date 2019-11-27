@@ -5,23 +5,17 @@ import { TimeSeries, MetadataService, OpendapService } from 'map-wald';
 import { map, switchAll } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-const standardVariables = [
-  'longitude',
-  'latitude',
-  'ID',
-  'admin_country',
-  'admin_province',
-  'hydro_basin',
-  'hydro_cat'
-];
+const DEFAULT_ID_COLUMN = 'ID';
 
 export interface FeatureDataConfig {
   label: string;
   filename: string;
+  id?:string;
   meta?: string[];
   variables: string[];
   time: string;
   timeFirst: boolean;
+  skipGeometry?: boolean;
 }
 
 @Injectable({
@@ -119,7 +113,8 @@ export class FeatureDataService {
             geometry:f.geometry,
             properties:Object.assign({},f.properties)
           };
-          const idx = (data.ID as number[]).indexOf(newF.properties.ID);
+          const idCol = layer.id||DEFAULT_ID_COLUMN;
+          const idx = (data[idCol] as number[]).indexOf(newF.properties[idCol]);
           newF.properties.value = data[query.variable][idx];
           return newF;
         })
@@ -133,10 +128,11 @@ export class FeatureDataService {
         let features:FeatureCollection = f;
         let config:FeatureDataConfig = layer;
         variable = variable || config.variables[0];
+        const idCol = layer.id||DEFAULT_ID_COLUMN;
         return {
           variable: variable,
           config: config,
-          idx: features.features.findIndex(f=>f.properties.ID===feature.properties.ID),
+          idx: features.features.findIndex(f=>f.properties[idCol]===feature.properties[idCol]),
           url: ''
         };
       }),
@@ -174,11 +170,12 @@ export class FeatureDataService {
   }
 
   private _retrieveLayer(lyr: FeatureDataConfig): Observable<FeatureCollection> {
-    const variables = ([] as string[]).concat(standardVariables, lyr.meta || []);
+    const variables = lyr.meta || [];
     const url = `${environment.tds}/dodsC/${lyr.filename}`;
+    const idCol = lyr.id||DEFAULT_ID_COLUMN;
     return forkJoin([this.metadata.dasForUrl(url),this.metadata.ddxForUrl(url)]).pipe(
       map(([das,ddx]) => {
-        const size = +ddx.variables.ID.dimensions[0].size;
+        const size = +ddx.variables[idCol].dimensions[0].size;
         const rangeQuery = this.dap.dapRangeQuery(0,size-1);
         return forkJoin(variables.map(v => {
           return this.dap.getData(`${url}.ascii?${v}`, das);
@@ -198,16 +195,20 @@ export class FeatureDataService {
           features: []
         };
 
-        result.features = data.longitude.map((_,i)=>{
+        result.features = data[idCol].map((_,i)=>{
           let f: Feature = {
             type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [data.longitude[i],data.latitude[i]],
-            },
+            geometry: null,
             properties:{}
           };
-          variables.slice(2).forEach(v=>{
+          if(!lyr.skipGeometry){
+            f.geometry = {
+              type: 'Point',
+              coordinates: [data.longitude[i],data.latitude[i]],
+            };
+          }
+
+          variables.filter(v=>(v!=='latitude')&&(v!=='longitude')).forEach(v=>{
             f.properties[v] = data[v][i];
           });
           return f;

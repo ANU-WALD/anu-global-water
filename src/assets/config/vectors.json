@@ -1,0 +1,35 @@
+{
+  "url": "ub8/global/{{collection}}/zonal_stats/{{layer}}/{{layerfn}}__{{rasterfn}}__{{variable}}.nc",
+  "vectors": [
+    {
+      "label": "Admin Boundaries",
+      "id":"plg_id",
+      "time":"time",
+      "urlParams":{
+        "layer":"admin",
+        "layerfn":"gadm36_0"
+      }
+    },
+    {
+      "label": "Basins",
+      "id":"plg_id",
+      "time":"time"
+    }
+  ],
+  "grids":[
+    {
+      "label":"API",
+      "urlParams":{
+        "collection":"GRAFS",
+        "rasterfn":"API_analysis_window",
+        "variable":"API"
+      },
+      "timeseries":[
+        "avg",
+        "min",
+        "max",
+        "coverage"
+      ]
+    }
+  ]
+}
