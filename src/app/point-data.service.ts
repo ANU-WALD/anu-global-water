@@ -23,6 +23,7 @@ export interface PointConfig {
   meta?: string[];
   variables: string[];
   time: string;
+  timeFirst: boolean;
 }
 
 @Injectable({
@@ -153,12 +154,19 @@ export class PointDataService {
       }),
       map(query=>{
         query.url = `${environment.tds}/dodsC/${query.config.filename}`;
-        return forkJoin([this.metadata.dasForUrl(query.url), of(query)]);
+        return forkJoin([this.metadata.dasForUrl(query.url), this.metadata.ddxForUrl(query.url), of(query)]);
       }),
       switchAll(),
-      map(([das,query])=>{
+      map(([das,ddx,query])=>{
         const range = this.dap.dapRangeQuery(query.idx);
-        return forkJoin([this.dap.getData(`${query.url}.ascii?${query.variable}${range}`,das),of(query)]);
+
+        let dateRange = '';
+        if(query.config.timeFirst){
+          const timeSize = +ddx.variables[query.config.time].dimensions[0].size;
+          dateRange = this.dap.dapRangeQuery(0,timeSize-1);
+        }
+        const url = `${query.url}.ascii?${query.variable}${dateRange}${range}`;
+        return forkJoin([this.dap.getData(url,das),of(query)]);
       }),
       switchAll(),
       map(([data,query])=>{
@@ -166,6 +174,12 @@ export class PointDataService {
         return {
           dates:data[query.config.time] as Date[],
           values:vals
+        };
+      }),
+      map(ts=>{
+        return {
+          dates:ts.dates.filter((_,i)=>!isNaN(ts.values[i])&&(ts.values[i]!==null)),
+          values:ts.values.filter(v=>!isNaN(v)&&(v!==null))
         };
       }));
     return res$;
