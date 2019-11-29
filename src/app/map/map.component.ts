@@ -9,6 +9,7 @@ import {PlotDataService} from '../plot-data.service';
 import {point} from 'leaflet';
 import {map, switchAll} from 'rxjs/operators';
 import {ZonalDataService} from '../zonal-data.service';
+import name_dict from '../../assets/names/name_dict.json';
 
 @Component({
   selector: 'app-map',
@@ -227,7 +228,7 @@ export class MapComponent implements OnInit {
         layer_display_name: 'API analysis',
         nc_variable: 'API',
         nc_file: 'API_analysis_window',
-        wms_url_base: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms/',
+        wms_url_base: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms',
         wms_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms/admin/FRA__API_analysis_window__API.nc',
         wms_options: {
           layers: 'API',
@@ -261,7 +262,7 @@ export class MapComponent implements OnInit {
         layer_display_name: 'SWI 1m analysis',
         nc_variable: 'wetness',
         nc_file: 'SWI_1m_analysis_window',
-        wms_url_base: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms/',
+        wms_url_base: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms',
         wms_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms/admin/FRA__SWI_1m_analysis_window__wetness.nc',
         wms_options: {
           layers: 'wetness',
@@ -295,7 +296,7 @@ export class MapComponent implements OnInit {
         layer_display_name: 'Wetness from API analysis',
         nc_variable: 'wetness',
         nc_file: 'Surface_Wetness_from_API_analysis_window',
-        wms_url_base: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms/',
+        wms_url_base: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms',
         wms_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms/admin/FRA__Surface_Wetness_from_API_analysis_window__wetness.nc',
         wms_options: {
           layers: 'wetness',
@@ -332,18 +333,20 @@ export class MapComponent implements OnInit {
       ],
 
       admin_layer: 'gadm36_0',
-      admin_layers: [
-        {value: 'gadm36_0', view_value: 'World'},
-        {value: 'AUS', view_value: 'Australia'},
-        {value: 'FRA', view_value: 'France'},
-      ],
+      admin_layers: name_dict.admin,
+      // admin_layers: [
+      //   {value: 'gadm36_0', view_value: 'World'},
+      //   {value: 'AUS', view_value: 'Australia'},
+      //   {value: 'FRA', view_value: 'France'},
+      // ],
 
       basin_layer: 'hybas_world_lev03_v1c',
       basin_layer_name: 'World',
-      basin_layers: [
-        {value: 'hybas_world_lev03_v1c', view_value: 'Global Basins'},
-        // {value: '1030000010', view_value: '1030000010'},
-        ],
+      basin_layers: name_dict.basin,
+      // basin_layers: [
+      //   {value: 'hybas_world_lev03_v1c', view_value: 'Global Basins'},
+      //   {value: '1030000010', view_value: '1030000010'},
+      //   ],
     },
 
     Point_layers: {
