@@ -1,127 +1,203 @@
 <div style="margin: 5px;">
 
 
-    <mat-card style="margin-bottom: 5px;">
+  <mat-card style="margin-bottom: 5px;">
 
-        <mat-card-subtitle>
-            Map Tools
-        </mat-card-subtitle>
+    <mat-card-subtitle>
+      Map Tools
+    </mat-card-subtitle>
 
-        <mat-card-content>
-            <button mat-icon-button (click)="map_left_panel_emit_out({func: 'zoom_in', params: {}})">
-                <mat-icon aria-label="zoom in">zoom_in</mat-icon>
-            </button>
+    <mat-card-content>
+      <button mat-icon-button (click)="map_left_panel_emit_out({func: 'zoom_in', params: {}})">
+        <mat-icon aria-label="zoom in">zoom_in</mat-icon>
+      </button>
 
-            <button mat-icon-button (click)="map_left_panel_emit_out({func: 'zoom_out', params: {}})">
-                <mat-icon aria-label="zoom out">zoom_out</mat-icon>
-            </button>
-        </mat-card-content>
+      <button mat-icon-button (click)="map_left_panel_emit_out({func: 'zoom_out', params: {}})">
+        <mat-icon aria-label="zoom out">zoom_out</mat-icon>
+      </button>
+    </mat-card-content>
 
 
-    </mat-card>
+  </mat-card>
 
-    <mat-card style="margin-bottom: 5px;">
+  <mat-card style="margin-bottom: 5px;">
 
-        <mat-card-subtitle>
-            Point layers
-        </mat-card-subtitle>
+    <mat-card-subtitle>
+      Point layers
+    </mat-card-subtitle>
 
-        <mat-card-content>
+    <mat-card-content>
 
-            <div *ngFor="let pnt_item of DAT.Point_layers | keyvalue; let pnt_i=index;">
+      <div *ngFor="let pnt_item of DAT.Point_layers | keyvalue; let pnt_i=index;">
 
-                <mat-checkbox
-                        [(ngModel)]="pnt_item.value.is_selected"
-                        (change)="map_left_panel_emit_out({
+        <mat-checkbox
+          [(ngModel)]="pnt_item.value.is_selected"
+          (change)="map_left_panel_emit_out({
                                 func: 'set_point_layer',
                                 params: {layer_name: pnt_item.key}})">{{pnt_item.value.layer_display_name}}
-                </mat-checkbox>
-            </div>
+        </mat-checkbox>
+      </div>
 
-        </mat-card-content>
+    </mat-card-content>
 
-    </mat-card>
+  </mat-card>
 
-    <mat-card style="margin-bottom: 5px;">
+  <mat-card style="margin-bottom: 5px;">
 
-        <mat-card-subtitle>
-            Dynamic layers
-        </mat-card-subtitle>
+    <mat-card-subtitle>
+      Dynamic layers
+    </mat-card-subtitle>
 
-        <mat-card-content>
+    <mat-card-content>
 
-            <div *ngFor="let wms_item of DAT.WMS_layers_dynamic | keyvalue; let wms_i=index;">
+      <div *ngFor="let wms_item of DAT.WMS_layers_dynamic | keyvalue; let wms_i=index;">
 
-                <mat-checkbox
-                        [(ngModel)]="wms_item.value.is_selected"
-                        (change)="map_left_panel_emit_out({
+        <mat-checkbox
+          [(ngModel)]="wms_item.value.is_selected"
+          (change)="map_left_panel_emit_out({
                                 func: 'set_wms_layer_dynamic',
                                 params: {layer_name: wms_item.key}})">{{wms_item.value.layer_display_name}}
-                </mat-checkbox>
-                <br>
-                <div [hidden]="!wms_item.value.is_selected" style="margin-left: 30px;">
-                    <mat-form-field>
-                        <input matInput
-                               [matDatepicker]="wms_i"
-                               [(ngModel)]="wms_item.value.date_dict.selected_date" placeholder="Choose a date"
-                               [min]="wms_item.value.date_dict.min_date"
-                               [max]="wms_item.value.date_dict.max_date"
-                               (dateChange)="map_left_panel_emit_out({
+        </mat-checkbox>
+        <br>
+        <div [hidden]="!wms_item.value.is_selected" style="margin-left: 30px;">
+          <mat-form-field>
+            <input matInput
+                   [matDatepicker]="wms_i"
+                   [(ngModel)]="wms_item.value.date_dict.selected_date" placeholder="Choose a date"
+                   [min]="wms_item.value.date_dict.min_date"
+                   [max]="wms_item.value.date_dict.max_date"
+                   (dateChange)="map_left_panel_emit_out({
                                func: 'set_wms_layer_dynamic',
                                params: {layer_name: wms_item.key}})">
-                        <mat-datepicker-toggle matSuffix [for]="wms_i"></mat-datepicker-toggle>
-                        <mat-datepicker #wms_i></mat-datepicker>
-                    </mat-form-field>
-                </div>
+            <mat-datepicker-toggle matSuffix [for]="wms_i"></mat-datepicker-toggle>
+            <mat-datepicker #wms_i></mat-datepicker>
+          </mat-form-field>
+        </div>
 
 
-            </div>
+      </div>
 
-        </mat-card-content>
+    </mat-card-content>
 
-    </mat-card>
+  </mat-card>
 
-    <mat-card style="margin-bottom: 5px;">
-        <mat-card-subtitle>
-            Static layers
-        </mat-card-subtitle>
+  <mat-card style="margin-bottom: 5px;">
 
-        <mat-card-content>
-            <div *ngFor="let wms_item of DAT.WMS_layers | keyvalue">
+    <mat-card-subtitle>
+      Zonal Statistics
+    </mat-card-subtitle>
 
-                <mat-checkbox
-                        [(ngModel)]="wms_item.value.is_selected"
-                        (change)="map_left_panel_emit_out({
+    <mat-card-content>
+
+      <div *ngFor="let wms_item of DAT.WMS_layers_zonal_stat | keyvalue; let wms_i=index;">
+
+        <mat-checkbox
+          [(ngModel)]="wms_item.value.is_selected"
+          (change)="map_left_panel_emit_out({
+                                func: 'set_wms_layer_zonal_stat',
+                                params: {layer_name: wms_item.key}})">{{wms_item.value.layer_display_name}}
+        </mat-checkbox>
+        <br>
+
+
+        <div [hidden]="!wms_item.value.is_selected" style="margin-left: 30px;">
+          <mat-form-field>
+            <mat-label>Type</mat-label>
+            <mat-select [(ngModel)]="DAT.WMS_layers_zonal_stat_settings.base"
+                        (selectionChange)="map_left_panel_emit_out({
+                               func: 'set_wms_layer_zonal_stat',
+                               params: {layer_name: wms_item.key}})">
+              <mat-option *ngFor="let base of DAT.WMS_layers_zonal_stat_settings.bases" [value]="base.value">
+                {{base.view_value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <br>
+          <mat-form-field *ngIf="DAT.WMS_layers_zonal_stat_settings.base === 'admin'">
+            <mat-label>Country</mat-label>
+            <mat-select [(ngModel)]="DAT.WMS_layers_zonal_stat_settings.admin_layer"
+                        (selectionChange)="map_left_panel_emit_out({
+                               func: 'set_wms_layer_zonal_stat',
+                               params: {layer_name: wms_item.key}})">
+              <mat-option *ngFor="let admin of DAT.WMS_layers_zonal_stat_settings.admin_layers" [value]="admin.value">
+                {{admin.view_value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field *ngIf="DAT.WMS_layers_zonal_stat_settings.base === 'basin'">
+            <mat-label>Basin</mat-label>
+            <mat-select [(ngModel)]="DAT.WMS_layers_zonal_stat_settings.basin_layer"
+                        (selectionChange)="map_left_panel_emit_out({
+                               func: 'set_wms_layer_zonal_stat',
+                               params: {layer_name: wms_item.key}})">
+              <mat-option *ngFor="let basin of DAT.WMS_layers_zonal_stat_settings.basin_layers" [value]="basin.value">
+                {{basin.view_value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+            <input matInput
+                   [matDatepicker]="wms_i"
+                   [(ngModel)]="wms_item.value.date_dict.selected_date" placeholder="Choose a date"
+                   [min]="wms_item.value.date_dict.min_date"
+                   [max]="wms_item.value.date_dict.max_date"
+                   (dateChange)="map_left_panel_emit_out({
+                               func: 'set_wms_layer_zonal_stat',
+                               params: {layer_name: wms_item.key}})">
+            <mat-datepicker-toggle matSuffix [for]="wms_i"></mat-datepicker-toggle>
+            <mat-datepicker #wms_i></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+
+      </div>
+
+    </mat-card-content>
+
+  </mat-card>
+
+  <mat-card style="margin-bottom: 5px;">
+    <mat-card-subtitle>
+      Static layers
+    </mat-card-subtitle>
+
+    <mat-card-content>
+      <div *ngFor="let wms_item of DAT.WMS_layers | keyvalue">
+
+        <mat-checkbox
+          [(ngModel)]="wms_item.value.is_selected"
+          (change)="map_left_panel_emit_out({
                                 func: 'set_wms_layer',
                                 params: {group_name: 'base_maps', layer_name: wms_item.key}})">{{wms_item.value.layer_display_name}}
-                </mat-checkbox>
+        </mat-checkbox>
 
-            </div>
+      </div>
 
-        </mat-card-content>
+    </mat-card-content>
 
-    </mat-card>
+  </mat-card>
 
 
-    <mat-card style="margin-bottom: 5px;">
+  <mat-card style="margin-bottom: 5px;">
 
-        <mat-card-subtitle>
-            Base Layers
-        </mat-card-subtitle>
+    <mat-card-subtitle>
+      Base Layers
+    </mat-card-subtitle>
 
-        <mat-card-content>
-            <mat-radio-group [(ngModel)]="DAT.base_layer_name"
-                             (change)="map_left_panel_emit_out({func: 'set_base_map', params: {base_layer: DAT.base_layer_name}})"
-                             aria-label="Select an option"
-                             style="display: flex; flex-direction: column;">
-                <mat-radio-button value="Satellite">Satellite</mat-radio-button>
-                <mat-radio-button value="Streets">Streets</mat-radio-button>
-                <mat-radio-button value="Dark">Dark</mat-radio-button>
-                <mat-radio-button value="Light">Light</mat-radio-button>
-            </mat-radio-group>
-        </mat-card-content>
+    <mat-card-content>
+      <mat-radio-group [(ngModel)]="DAT.base_layer_name"
+                       (change)="map_left_panel_emit_out({func: 'set_base_map', params: {base_layer: DAT.base_layer_name}})"
+                       aria-label="Select an option"
+                       style="display: flex; flex-direction: column;">
+        <mat-radio-button value="Satellite">Satellite</mat-radio-button>
+        <mat-radio-button value="Streets">Streets</mat-radio-button>
+        <mat-radio-button value="Dark">Dark</mat-radio-button>
+        <mat-radio-button value="Light">Light</mat-radio-button>
+      </mat-radio-group>
+    </mat-card-content>
 
-    </mat-card>
+  </mat-card>
 
 
 </div>

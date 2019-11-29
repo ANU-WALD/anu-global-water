@@ -8,7 +8,7 @@ import {PointDataService} from '../point-data.service';
 import {PlotDataService} from '../plot-data.service';
 import {point} from 'leaflet';
 import {map, switchAll} from 'rxjs/operators';
-import { ZonalDataService } from '../zonal-data.service';
+import {ZonalDataService} from '../zonal-data.service';
 
 @Component({
   selector: 'app-map',
@@ -24,16 +24,16 @@ export class MapComponent implements OnInit {
               private palettes: PaletteService) {
     // this.pointData.getLayers().subscribe(layers => console.log(layers));
 
-    this.zonalData.getVectorLayers().subscribe(layers=>console.log(layers));
-    this.zonalData.getDataLayers().subscribe(layers=>console.log(layers));
+    this.zonalData.getVectorLayers().subscribe(layers => console.log(layers));
+    this.zonalData.getDataLayers().subscribe(layers => console.log(layers));
 
-    this.zonalData.getTimeSeries('Admin Boundaries','API',{
-      type:'Feature',
-      geometry:null,
-      properties:{
-        plg_id:196.0
+    this.zonalData.getTimeSeries('Admin Boundaries', 'API', {
+      type: 'Feature',
+      geometry: null,
+      properties: {
+        plg_id: 196.0
       }
-    }).subscribe(ts=>{
+    }).subscribe(ts => {
       console.log('Time series from zonal stats');
       console.log(ts);
     });
@@ -217,7 +217,133 @@ export class MapComponent implements OnInit {
           text: ''
         }
       },
+    },
 
+    WMS_layers_zonal_stat: {
+      GRAFS_API_analysis: {
+        group_name: 'zonal_stat',
+        group_display_name: 'Zonal Stat',
+        layer_name: 'GRAFS_API_analysis',
+        layer_display_name: 'API analysis',
+        nc_variable: 'API',
+        nc_file: 'API_analysis_window',
+        wms_url_base: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms/',
+        wms_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms/admin/FRA__API_analysis_window__API.nc',
+        wms_options: {
+          layers: 'API',
+          transparent: true,
+          format: 'image/png',
+          version: '1.3.0',
+          styles: 'boxfill/nrm_rainfall',
+        },
+        crs: 'EPSG3857',
+        is_selected: false,
+        opacity: 0.5,
+        show_controls: false,
+        has_dates: false,
+        date_dict: {
+          selected_date: null,
+          min_year: 2014,
+          min_date: null,
+          max_date: null,
+        },
+        has_legend: false,
+        legend_url: null,
+        info: {
+          title: '',
+          text: ''
+        }
+      },
+      GRAFS_SWI_1m_analysis: {
+        group_name: 'zonal_stat',
+        group_display_name: 'Zonal Stat',
+        layer_name: 'GRAFS_SWI_1m_analysis',
+        layer_display_name: 'SWI 1m analysis',
+        nc_variable: 'wetness',
+        nc_file: 'SWI_1m_analysis_window',
+        wms_url_base: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms/',
+        wms_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms/admin/FRA__SWI_1m_analysis_window__wetness.nc',
+        wms_options: {
+          layers: 'wetness',
+          transparent: true,
+          format: 'image/png',
+          version: '1.3.0',
+          styles: 'boxfill/nrm_rainfall',
+        },
+        crs: 'EPSG3857',
+        is_selected: false,
+        opacity: 0.5,
+        show_controls: false,
+        has_dates: false,
+        date_dict: {
+          selected_date: null,
+          min_year: 2014,
+          min_date: null,
+          max_date: null,
+        },
+        has_legend: false,
+        legend_url: null,
+        info: {
+          title: '',
+          text: ''
+        }
+      },
+      Surface_Wetness_from_API_analysis: {
+        group_name: 'zonal_stat',
+        group_display_name: 'Zonal Stat',
+        layer_name: 'Surface_Wetness_from_API_analysis',
+        layer_display_name: 'Wetness from API analysis',
+        nc_variable: 'wetness',
+        nc_file: 'Surface_Wetness_from_API_analysis_window',
+        wms_url_base: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms/',
+        wms_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/zonal_stats_wms/admin/FRA__Surface_Wetness_from_API_analysis_window__wetness.nc',
+        wms_options: {
+          layers: 'wetness',
+          transparent: true,
+          format: 'image/png',
+          version: '1.3.0',
+          styles: 'boxfill/nrm_rainfall',
+        },
+        crs: 'EPSG3857',
+        is_selected: false,
+        opacity: 0.5,
+        show_controls: false,
+        has_dates: false,
+        date_dict: {
+          selected_date: null,
+          min_year: 2014,
+          min_date: null,
+          max_date: null,
+        },
+        has_legend: false,
+        legend_url: null,
+        info: {
+          title: '',
+          text: ''
+        }
+      },
+    },
+
+    WMS_layers_zonal_stat_settings: {
+      base: 'admin',
+      bases: [
+        {value: 'admin', view_value: 'World & Countries'},
+        {value: 'basin', view_value: 'HydroSHD Basins'}
+      ],
+
+      admin_layer: 'gadm36_0',
+      admin_layers: [
+        {value: 'gadm36_0', view_value: 'World'},
+        {value: 'AUS', view_value: 'Australia'},
+        {value: 'FRA', view_value: 'France'},
+      ],
+
+      basin_layer: 'hybas_world_lev03_v1c',
+      basin_layer_name: 'World',
+      basin_layers: [
+        {value: 'hybas_world_lev03_v1c', view_value: 'Global Basins'},
+        // {value: '1030000010', view_value: '1030000010'},
+        ],
     },
 
     Point_layers: {
@@ -286,6 +412,7 @@ export class MapComponent implements OnInit {
     map: null as L.Map,
     WMS_layers: {},
     WMS_layers_dynamic: {},
+    WMS_layers_zonal_stat: {},
     Point_layers: {},
   };
 
@@ -330,7 +457,6 @@ export class MapComponent implements OnInit {
     }
 
     // set last date for dynamic layers
-
     let today = new Date();
     let cur_year = today.getFullYear();
     for (let wms_key in this.DAT.WMS_layers_dynamic) {
@@ -356,6 +482,28 @@ export class MapComponent implements OnInit {
         layer_dict.date_dict.max_date = maxs[maxs.length - 1];
         layer_dict.date_dict.selected_date = layer_dict.date_dict.max_date;
 
+      });
+    }
+
+    // set last date for zonal stat wms layers
+    for (let wms_key in this.DAT.WMS_layers_zonal_stat) {
+
+      this.OBJ.WMS_layers_zonal_stat[wms_key] = null;
+
+      let layer_dict = this.DAT.WMS_layers_zonal_stat[wms_key];
+      let wms_url = null;
+      let dods_url = null;
+      let min_year = layer_dict.date_dict.min_year;
+      // min date
+      let datesMin$ = this.getDates(layer_dict.wms_url, {});
+
+      forkJoin([datesMin$]).subscribe(allDates => {
+        let datesList = allDates[0];
+        let mins = datesList[0];
+        let maxs = datesList[datesList.length - 1];
+        layer_dict.date_dict.min_date = mins;
+        layer_dict.date_dict.max_date = maxs;
+        layer_dict.date_dict.selected_date = layer_dict.date_dict.max_date;
       });
     }
 
@@ -425,9 +573,14 @@ export class MapComponent implements OnInit {
     console.log('in map');
 
     if (this.DAT.WMS_layers_dynamic[layer_name].is_selected) {
-      console.log('selected');
+
+      if (this.OBJ.WMS_layers_dynamic[layer_name] !== null) {
+        this.OBJ.map.removeLayer(this.OBJ.WMS_layers_dynamic[layer_name]);
+        this.DAT.WMS_layers_dynamic[layer_name].show_controls = false;
+      }
+
       let layer_date = this.DAT.WMS_layers_dynamic[layer_name].date_dict.selected_date;
-      console.log(layer_date);
+
       layer_date = new Date(Date.UTC(layer_date.getFullYear(), layer_date.getMonth(), layer_date.getDate(), 0, 0, 0));
 
       let wms_url = InterpolationService.interpolate(this.DAT.WMS_layers_dynamic[layer_name].wms_url, {
@@ -444,6 +597,50 @@ export class MapComponent implements OnInit {
       if (this.OBJ.WMS_layers_dynamic[layer_name] !== null) {
         this.OBJ.map.removeLayer(this.OBJ.WMS_layers_dynamic[layer_name]);
         this.DAT.WMS_layers_dynamic[layer_name].show_controls = false;
+      }
+    }
+  }
+
+  set_wms_layer_zonal_stat(layer_name) {
+
+    console.log(this.DAT.WMS_layers_zonal_stat_settings.base);
+    console.log(this.DAT.WMS_layers_zonal_stat_settings.admin_layer);
+
+    let url_base = this.DAT.WMS_layers_zonal_stat_settings.base;
+    let url_feature = null;
+    if (url_base === 'admin'){
+      url_feature = this.DAT.WMS_layers_zonal_stat_settings.admin_layer;
+    } else {
+      url_feature = this.DAT.WMS_layers_zonal_stat_settings.basin_layer;
+    }
+
+
+
+
+    if (this.DAT.WMS_layers_zonal_stat[layer_name].is_selected) {
+      if (this.OBJ.WMS_layers_zonal_stat[layer_name] !== null) {
+        this.OBJ.map.removeLayer(this.OBJ.WMS_layers_zonal_stat[layer_name]);
+        this.DAT.WMS_layers_zonal_stat[layer_name].show_controls = false;
+      }
+
+      let layer_date = this.DAT.WMS_layers_zonal_stat[layer_name].date_dict.selected_date;
+
+      layer_date = new Date(Date.UTC(layer_date.getFullYear(), layer_date.getMonth(), layer_date.getDate(), 0, 0, 0));
+      let nc_variable = this.DAT.WMS_layers_zonal_stat[layer_name].nc_variable;
+      let nc_file = this.DAT.WMS_layers_zonal_stat[layer_name].nc_file;
+      let wms_url = this.DAT.WMS_layers_zonal_stat[layer_name].wms_url_base + '/' + url_base + '/' + url_feature + '__' + nc_file + '__' + nc_variable + '.nc';
+      console.log(wms_url);
+      this.DAT.WMS_layers_zonal_stat[layer_name].wms_options.time = layer_date.toISOString();
+
+      this.OBJ.WMS_layers_zonal_stat[layer_name] = L.tileLayer.wms(wms_url, this.DAT.WMS_layers_zonal_stat[layer_name].wms_options);
+      this.OBJ.WMS_layers_zonal_stat[layer_name].addTo(this.OBJ.map);
+
+
+    } else {
+      console.log('not selected');
+      if (this.OBJ.WMS_layers_zonal_stat[layer_name] !== null) {
+        this.OBJ.map.removeLayer(this.OBJ.WMS_layers_zonal_stat[layer_name]);
+        this.DAT.WMS_layers_zonal_stat[layer_name].show_controls = false;
       }
     }
   }
@@ -484,6 +681,9 @@ export class MapComponent implements OnInit {
         break;
       case 'set_wms_layer_dynamic':
         this.set_wms_layer_dynamic($event.params.layer_name);
+        break;
+      case 'set_wms_layer_zonal_stat':
+        this.set_wms_layer_zonal_stat($event.params.layer_name);
         break;
       case 'set_point_layer':
         this.set_point_layer($event.params.layer_name);
