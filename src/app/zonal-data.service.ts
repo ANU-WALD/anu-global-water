@@ -52,13 +52,13 @@ export class ZonalDataService {
     );
   }
 
-  getTimeSeries(vectorLayer:string,dataLayer:string,feature:Feature,variable?:string):Observable<TimeSeries>{
-    return this._layerConfig(vectorLayer,dataLayer).pipe(
+  getTimeSeries(vectorLayer:string,dataLayer:string,feature:Feature,params?:any,variable?:string):Observable<TimeSeries>{
+    return this._layerConfig(vectorLayer,dataLayer,params).pipe(
       map(lyr=>this.featureData.getTimeSeries(lyr,feature,variable)),
       switchAll());
   }
 
-  private _layerConfig(vectorLayer:string,dataLayer:string):Observable<FeatureDataConfig>{
+  private _layerConfig(vectorLayer:string,dataLayer:string,params?:any):Observable<FeatureDataConfig>{
     return this.layers.pipe(
       map(cfg=>{
 
@@ -67,7 +67,7 @@ export class ZonalDataService {
 
         const result = {
           label: `${vectorLayer}${LAYER_DELIMITER}${dataLayer}`,
-          filename: InterpolationService.interpolate(cfg.url,Object.assign({},vectorCfg.urlParams||{},gridCfg.urlParams||{})),
+          filename: InterpolationService.interpolate(cfg.url,Object.assign({},vectorCfg.urlParams||{},gridCfg.urlParams||{},params||{})),
           meta:[
             vectorCfg.id
           ],

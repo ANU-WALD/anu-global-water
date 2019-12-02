@@ -1,19 +1,21 @@
 {
-  "url": "ub8/global/{{collection}}/zonal_stats/{{layer}}/{{layerfn}}__{{rasterfn}}__{{variable}}.nc",
+  "url": "ub8/global/{{collection}}/zonal_stats/{{layer}}/{{region}}__{{rasterfn}}__{{variable}}.nc",
   "vectors": [
     {
       "label": "Admin Boundaries",
       "id":"plg_id",
       "time":"time",
       "urlParams":{
-        "layer":"admin",
-        "layerfn":"gadm36_0"
+        "layer":"admin"
       }
     },
     {
       "label": "Basins",
       "id":"plg_id",
-      "time":"time"
+      "time":"time",
+      "urlParams":{
+        "layer":"basin"
+      }
     }
   ],
   "grids":[
@@ -23,6 +25,34 @@
         "collection":"GRAFS",
         "rasterfn":"API_analysis_window",
         "variable":"API"
+      },
+      "timeseries":[
+        "avg",
+        "min",
+        "max",
+        "coverage"
+      ]
+    },
+    {
+      "label":"SWI",
+      "urlParams":{
+        "collection":"GRAFS",
+        "rasterfn":"SWI_1m_analysis_window",
+        "variable":"wetness"
+      },
+      "timeseries":[
+        "avg",
+        "min",
+        "max",
+        "coverage"
+      ]
+    },
+    {
+      "label":"Surface Wetness",
+      "urlParams":{
+        "collection":"GRAFS",
+        "rasterfn":"Surface_Wetness_from_API_analysis_window",
+        "variable":"wetness"
       },
       "timeseries":[
         "avg",

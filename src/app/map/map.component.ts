@@ -28,13 +28,16 @@ export class MapComponent implements OnInit {
     this.zonalData.getVectorLayers().subscribe(layers => console.log(layers));
     this.zonalData.getDataLayers().subscribe(layers => console.log(layers));
 
-    this.zonalData.getTimeSeries('Admin Boundaries', 'API', {
-      type: 'Feature',
-      geometry: null,
-      properties: {
-        plg_id: 196.0
-      }
-    }).subscribe(ts => {
+    this.zonalData.getTimeSeries('Admin Boundaries','API',{
+      type:'Feature',
+      geometry:null,
+      properties:{
+        plg_id:5.0
+      },
+    },
+    { // New parameter
+      region:'AUS'
+    }).subscribe(ts=>{
       console.log('Time series from zonal stats');
       console.log(ts);
     });
