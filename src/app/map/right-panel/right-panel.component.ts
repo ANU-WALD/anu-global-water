@@ -33,6 +33,11 @@ export class RightPanelComponent implements OnInit {
     }
   };
 
+  public gui_flags = {
+    point_plot: false,
+    zonal_stat_plot: false,
+  };
+
   @Input() DAT = {
     gui_controls: {nav_right: {opened: null}},
   };
@@ -46,98 +51,192 @@ export class RightPanelComponent implements OnInit {
 
   ngOnInit() {
 
-
     this.subscription = this.plotDataService.cmdObservable$.subscribe((res) => {
-      console.log('res++++', res);
 
-      this.selected_point = res.data;
-      console.log(this.selected_point);
-      console.log(admin_names);
-      console.log();
+      let plot_app = res.plot_app;
+      console.log(plot_app);
 
-      let admin_info = admin_names[this.selected_point.point.properties.admin_country];
-      this.selected_point.info = {
-        country_name: admin_info.NAME_0,
-        state_name: admin_info.GID_1[this.selected_point.point.properties.admin_province]
-      };
+      switch (plot_app) {
 
-      let div_id = 'plotly_ts';
+        case 'point_plot':
+          this.gui_flags.point_plot = true;
+          this.gui_flags.zonal_stat_plot = false;
+          this.plotPointData(res.data);
+          break;
+        case 'zonal_stat_ts_plot':
+          this.gui_flags.point_plot = false;
+          this.gui_flags.zonal_stat_plot = true;
+          this.plotZonalStatTs(res.data);
+          break;
+        default:
+          this.gui_flags.point_plot = false;
+          this.gui_flags.zonal_stat_plot = false;
+          break;
 
-      let plot_data = [{
-        x: res.data.dates,
-        y: res.data.values,
-      }];
-      let min_date = res.data.dates[0];
-      let max_date = res.data.dates[res.data.dates.length - 1];
+      }
 
-      let layout = {
-
-        title: {
-          text: res.data.plot_config.plot_title,
-          // font: {
-          //   family: 'Courier New, monospace',
-          //   size: 12
-          // },
-          xref: 'paper',
-          x: 0.05,
-        },
-        xaxis: {
-          autorange: true,
-          // rangeselector: {
-          //     buttons: [
-          //         {
-          //             count: 1,
-          //             label: '1m',
-          //             step: 'month',
-          //             stepmode: 'forward'
-          //         },
-          //         {
-          //             count: 6,
-          //             label: '6m',
-          //             step: 'month',
-          //             stepmode: 'forward'
-          //         },
-          //         {
-          //             count: 12,
-          //             label: '1y',
-          //             step: 'month',
-          //             stepmode: 'forward'
-          //         },
-          //         {step: 'all'}
-          //     ]
-          // },
-          rangeslider: {range: [min_date, max_date]},
-          type: 'date'
-        },
-        yaxis: {
-          autorange: true,
-          // range: [0, 100],
-          title: {
-            text: res.data.plot_config.left_axis_title,
-            // font: {
-            //   family: 'Courier New, monospace',
-            //   size: 10,
-            //   color: '#7f7f7f'
-            // }
-          },
-          type: 'linear'
-        },
-        margin: {
-          t: 30, //top margin
-          l: 50, //left margin
-          r: 30, //right margin
-          b: 30 //bottom margin
-        }
-      };
-
-
-      Plotly.newPlot(div_id, plot_data, layout, {responsive: true});
-
-      this.DAT.gui_controls.nav_right.opened = true;
     });
-
 
   }
 
+  plotPointData(point_data) {
+    this.selected_point = point_data;
+
+    let admin_info = admin_names[this.selected_point.point.properties.admin_country];
+    this.selected_point.info = {
+      country_name: admin_info.NAME_0,
+      state_name: admin_info.GID_1[this.selected_point.point.properties.admin_province]
+    };
+
+    let div_id = 'plotly_ts';
+
+    let plot_data = [{
+      x: point_data.dates,
+      y: point_data.values,
+    }];
+    let min_date = point_data.dates[0];
+    let max_date = point_data.dates[point_data.dates.length - 1];
+
+    let layout = {
+
+      title: {
+        text: point_data.plot_config.plot_title,
+        // font: {
+        //   family: 'Courier New, monospace',
+        //   size: 12
+        // },
+        xref: 'paper',
+        x: 0.05,
+      },
+      xaxis: {
+        autorange: true,
+        // rangeselector: {
+        //     buttons: [
+        //         {
+        //             count: 1,
+        //             label: '1m',
+        //             step: 'month',
+        //             stepmode: 'forward'
+        //         },
+        //         {
+        //             count: 6,
+        //             label: '6m',
+        //             step: 'month',
+        //             stepmode: 'forward'
+        //         },
+        //         {
+        //             count: 12,
+        //             label: '1y',
+        //             step: 'month',
+        //             stepmode: 'forward'
+        //         },
+        //         {step: 'all'}
+        //     ]
+        // },
+        rangeslider: {range: [min_date, max_date]},
+        type: 'date'
+      },
+      yaxis: {
+        autorange: true,
+        // range: [0, 100],
+        title: {
+          text: point_data.plot_config.left_axis_title,
+          // font: {
+          //   family: 'Courier New, monospace',
+          //   size: 10,
+          //   color: '#7f7f7f'
+          // }
+        },
+        type: 'linear'
+      },
+      margin: {
+        t: 30, //top margin
+        l: 50, //left margin
+        r: 30, //right margin
+        b: 30 //bottom margin
+      }
+    };
+
+    Plotly.newPlot(div_id, plot_data, layout, {responsive: true});
+
+    this.DAT.gui_controls.nav_right.opened = true;
+  }
+
+  plotZonalStatTs(point_data) {
+
+    let div_id = 'plotly_zst_ts';
+
+    let plot_data = [{
+      x: point_data.dates,
+      y: point_data.values,
+    }];
+    let min_date = point_data.dates[0];
+    let max_date = point_data.dates[point_data.dates.length - 1];
+
+    let layout = {
+
+      // title: {
+      //   text: point_data.plot_config.plot_title,
+      //   // font: {
+      //   //   family: 'Courier New, monospace',
+      //   //   size: 12
+      //   // },
+      //   xref: 'paper',
+      //   x: 0.05,
+      // },
+      xaxis: {
+        autorange: true,
+        // rangeselector: {
+        //     buttons: [
+        //         {
+        //             count: 1,
+        //             label: '1m',
+        //             step: 'month',
+        //             stepmode: 'forward'
+        //         },
+        //         {
+        //             count: 6,
+        //             label: '6m',
+        //             step: 'month',
+        //             stepmode: 'forward'
+        //         },
+        //         {
+        //             count: 12,
+        //             label: '1y',
+        //             step: 'month',
+        //             stepmode: 'forward'
+        //         },
+        //         {step: 'all'}
+        //     ]
+        // },
+        rangeslider: {range: [min_date, max_date]},
+        type: 'date'
+      },
+      yaxis: {
+        autorange: true,
+        // range: [0, 100],
+        // title: {
+        //   text: point_data.plot_config.left_axis_title,
+        //   // font: {
+        //   //   family: 'Courier New, monospace',
+        //   //   size: 10,
+        //   //   color: '#7f7f7f'
+        //   // }
+        // },
+        type: 'linear'
+      },
+      margin: {
+        t: 30, //top margin
+        l: 50, //left margin
+        r: 30, //right margin
+        b: 30 //bottom margin
+      }
+    };
+
+    Plotly.purge(div_id);
+    Plotly.newPlot(div_id, plot_data, layout, {responsive: true});
+
+    this.DAT.gui_controls.nav_right.opened = true;
+  }
 
 }

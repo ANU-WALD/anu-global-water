@@ -72,6 +72,8 @@
             <mat-datepicker-toggle matSuffix [for]="wms_i"></mat-datepicker-toggle>
             <mat-datepicker #wms_i></mat-datepicker>
           </mat-form-field>
+          <br>
+          <img [src]="wms_item.value.legend_url" height="200">
         </div>
 
 
@@ -84,7 +86,7 @@
   <mat-card style="margin-bottom: 5px;">
 
     <mat-card-subtitle>
-      Zonal Statistics
+      Zonal Statistics Layers
     </mat-card-subtitle>
 
     <mat-card-content>
@@ -98,7 +100,6 @@
                                 params: {layer_name: wms_item.key}})">{{wms_item.value.layer_display_name}}
         </mat-checkbox>
         <br>
-
 
         <div [hidden]="!wms_item.value.is_selected" style="margin-left: 30px;">
           <mat-form-field>
@@ -148,6 +149,8 @@
             <mat-datepicker-toggle matSuffix [for]="wms_i"></mat-datepicker-toggle>
             <mat-datepicker #wms_i></mat-datepicker>
           </mat-form-field>
+          <br>
+          <img [src]="wms_item.value.legend_url" height="200">
         </div>
 
 
@@ -157,26 +160,103 @@
 
   </mat-card>
 
+
   <mat-card style="margin-bottom: 5px;">
+
     <mat-card-subtitle>
-      Static layers
+      Zonal Statistics Time Series
     </mat-card-subtitle>
 
     <mat-card-content>
-      <div *ngFor="let wms_item of DAT.WMS_layers | keyvalue">
 
-        <mat-checkbox
-          [(ngModel)]="wms_item.value.is_selected"
-          (change)="map_left_panel_emit_out({
-                                func: 'set_wms_layer',
-                                params: {group_name: 'base_maps', layer_name: wms_item.key}})">{{wms_item.value.layer_display_name}}
-        </mat-checkbox>
+      <mat-form-field>
+        <mat-label>Data Source</mat-label>
+        <mat-select [(ngModel)]="DAT.zonal_stat_ts_setting.grid_layer"
+                    (selectionChange)="map_left_panel_emit_out({
+                               func: 'plot_zonal_stat_ts',
+                               params: {}})">
+          <mat-option *ngFor="let grid of DAT.zonal_stat_ts_setting.grid_layers" [value]="grid.value">
+            {{grid.view_value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br>
 
-      </div>
+      <mat-form-field>
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="DAT.zonal_stat_ts_setting.type"
+                    (selectionChange)="map_left_panel_emit_out({
+                               func: 'plot_zonal_stat_ts',
+                               params: {}})">
+          <mat-option *ngFor="let type of DAT.zonal_stat_ts_setting.types" [value]="type.value">
+            {{type.view_value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <br>
+      <mat-form-field *ngIf="DAT.zonal_stat_ts_setting.type === 'admin'">
+        <mat-label>Country</mat-label>
+        <mat-select [(ngModel)]="DAT.zonal_stat_ts_setting.admin_layer"
+                    (selectionChange)="map_left_panel_emit_out({
+                               func: 'plot_zonal_stat_ts',
+                               params: {}})">
+          <mat-option *ngFor="let admin of DAT.zonal_stat_ts_setting.admin_layers" [value]="admin.value">
+            {{admin.view_value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="DAT.zonal_stat_ts_setting.type === 'basin'">
+        <mat-label>Basin</mat-label>
+        <mat-select [(ngModel)]="DAT.zonal_stat_ts_setting.basin_layer"
+                    (selectionChange)="map_left_panel_emit_out({
+                               func: 'plot_zonal_stat_ts',
+                               params: {}})">
+          <mat-option *ngFor="let basin of DAT.zonal_stat_ts_setting.basin_layers" [value]="basin.value">
+            {{basin.view_value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <mat-label>Polygon</mat-label>
+        <mat-select [(ngModel)]="DAT.zonal_stat_ts_setting.plg_id"
+                    (selectionChange)="map_left_panel_emit_out({
+                               func: 'plot_zonal_stat_ts',
+                               params: {}})">
+          <mat-option *ngFor="let plg of DAT.zonal_stat_ts_setting.plg_ids" [value]="plg.value">
+            {{plg.view_value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
 
     </mat-card-content>
 
   </mat-card>
+
+
+<!--  <mat-card style="margin-bottom: 5px;">-->
+<!--    <mat-card-subtitle>-->
+<!--      Static layers-->
+<!--    </mat-card-subtitle>-->
+
+<!--    <mat-card-content>-->
+<!--      <div *ngFor="let wms_item of DAT.WMS_layers | keyvalue">-->
+
+<!--        <mat-checkbox-->
+<!--          [(ngModel)]="wms_item.value.is_selected"-->
+<!--          (change)="map_left_panel_emit_out({-->
+<!--                                func: 'set_wms_layer',-->
+<!--                                params: {group_name: 'base_maps', layer_name: wms_item.key}})">{{wms_item.value.layer_display_name}}-->
+<!--        </mat-checkbox>-->
+
+<!--      </div>-->
+
+<!--    </mat-card-content>-->
+
+<!--  </mat-card>-->
 
 
   <mat-card style="margin-bottom: 5px;">

@@ -10,6 +10,7 @@ import {point} from 'leaflet';
 import {map, switchAll} from 'rxjs/operators';
 import {ZonalDataService} from '../zonal-data.service';
 import name_dict from '../../assets/names/name_dict.json';
+import row_id_dict from '../../assets/names/row_id_dict.json';
 
 @Component({
   selector: 'app-map',
@@ -28,28 +29,29 @@ export class MapComponent implements OnInit {
     this.zonalData.getVectorLayers().subscribe(layers => console.log(layers));
     this.zonalData.getDataLayers().subscribe(layers => console.log(layers));
 
-    this.zonalData.getTimeSeries('Admin Boundaries','API',{
-      type:'Feature',
-      geometry:null,
-      properties:{
-        plg_id:5.0
-      },
-    },
-    { // New parameter
-      region:'AUS'
-    }).subscribe(ts=>{
-      console.log('Time series from zonal stats');
-      console.log(ts);
-    });
+    // this.zonalData.getTimeSeries('Admin Boundaries', 'API', {
+    //     type: 'Feature',
+    //     geometry: null,
+    //     properties: {
+    //       plg_id: 5.0
+    //     },
+    //   },
+    //   { // New parameter
+    //     region: 'AUS'
+    //   }).subscribe(ts => {
+    //   console.log('Time series from zonal stats');
+    //   console.log(ts);
+    // });
 
 
-    this.pointData.getTimes('Major streams').pipe(
-      map(dates => dates[dates.length - 1]),
-      map(date => this.pointData.getValues('Major streams', null, date)),
-      switchAll()
-    ).subscribe(d => {
-      console.log(d);
-    });
+    // this.pointData.getTimes('Major streams').pipe(
+    //   map(dates => dates[dates.length - 1]),
+    //   map(date => this.pointData.getValues('Major streams', null, date)),
+    //   switchAll()
+    // ).subscribe(d => {
+    //   console.log('this is d');
+    //   console.log(d);
+    // });
 
     this.palettes.getPalette('RdYlBu', false, 7).subscribe(pal => {
       console.log(pal);
@@ -139,7 +141,8 @@ export class MapComponent implements OnInit {
           transparent: true,
           format: 'image/png',
           version: '1.3.0',
-          styles: 'boxfill/nrm_rainfall',
+          styles: 'boxfill/anu_fmc_rdylbu_9',
+          colorscalerange: '0,100',
         },
         crs: 'EPSG3857',
         is_selected: false,
@@ -153,7 +156,7 @@ export class MapComponent implements OnInit {
           max_date: null,
         },
         has_legend: false,
-        legend_url: null,
+        legend_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/API_analysis_window_2019.nc?REQUEST=GetLegendGraphic&LAYER=API&PALETTE=anu_fmc_rdylbu_9&colorscalerange=0,100',
         info: {
           title: '',
           text: ''
@@ -170,7 +173,8 @@ export class MapComponent implements OnInit {
           transparent: true,
           format: 'image/png',
           version: '1.3.0',
-          styles: 'boxfill/nrm_rainfall',
+          styles: 'boxfill/anu_fmc_rdylbu_9',
+          colorscalerange: '0,1',
         },
         crs: 'EPSG3857',
         is_selected: false,
@@ -184,7 +188,7 @@ export class MapComponent implements OnInit {
           max_date: null,
         },
         has_legend: false,
-        legend_url: null,
+        legend_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/SWI_1m_analysis_window_2019.nc?REQUEST=GetLegendGraphic&LAYER=wetness&PALETTE=anu_fmc_rdylbu_9&colorscalerange=0,1',
         info: {
           title: '',
           text: ''
@@ -201,7 +205,8 @@ export class MapComponent implements OnInit {
           transparent: true,
           format: 'image/png',
           version: '1.3.0',
-          styles: 'boxfill/nrm_rainfall',
+          styles: 'boxfill/anu_fmc_rdylbu_9',
+          colorscalerange: '0,1',
         },
         crs: 'EPSG3857',
         is_selected: false,
@@ -215,7 +220,7 @@ export class MapComponent implements OnInit {
           max_date: null,
         },
         has_legend: false,
-        legend_url: null,
+        legend_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/Surface_Wetness_from_API_analysis_window_2014.nc?REQUEST=GetLegendGraphic&LAYER=wetness&PALETTE=anu_fmc_rdylbu_9&colorscalerange=0,1',
         info: {
           title: '',
           text: ''
@@ -238,7 +243,8 @@ export class MapComponent implements OnInit {
           transparent: true,
           format: 'image/png',
           version: '1.3.0',
-          styles: 'boxfill/nrm_rainfall',
+          styles: 'boxfill/anu_fmc_rdylbu_9',
+          colorscalerange: '0,100',
         },
         crs: 'EPSG3857',
         is_selected: false,
@@ -252,7 +258,7 @@ export class MapComponent implements OnInit {
           max_date: null,
         },
         has_legend: false,
-        legend_url: null,
+        legend_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/API_analysis_window_2019.nc?REQUEST=GetLegendGraphic&LAYER=API&PALETTE=anu_fmc_rdylbu_9&colorscalerange=0,100',
         info: {
           title: '',
           text: ''
@@ -272,7 +278,8 @@ export class MapComponent implements OnInit {
           transparent: true,
           format: 'image/png',
           version: '1.3.0',
-          styles: 'boxfill/nrm_rainfall',
+          styles: 'boxfill/anu_fmc_rdylbu_9',
+          colorscalerange: '0,1',
         },
         crs: 'EPSG3857',
         is_selected: false,
@@ -286,7 +293,7 @@ export class MapComponent implements OnInit {
           max_date: null,
         },
         has_legend: false,
-        legend_url: null,
+        legend_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/SWI_1m_analysis_window_2019.nc?REQUEST=GetLegendGraphic&LAYER=wetness&PALETTE=anu_fmc_rdylbu_9&colorscalerange=0,1',
         info: {
           title: '',
           text: ''
@@ -306,7 +313,8 @@ export class MapComponent implements OnInit {
           transparent: true,
           format: 'image/png',
           version: '1.3.0',
-          styles: 'boxfill/nrm_rainfall',
+          styles: 'boxfill/anu_fmc_rdylbu_9',
+          colorscalerange: '0,1',
         },
         crs: 'EPSG3857',
         is_selected: false,
@@ -320,7 +328,7 @@ export class MapComponent implements OnInit {
           max_date: null,
         },
         has_legend: false,
-        legend_url: null,
+        legend_url: 'http://dapds00.nci.org.au/thredds/wms/ub8/global/GRAFS/Surface_Wetness_from_API_analysis_window_2014.nc?REQUEST=GetLegendGraphic&LAYER=wetness&PALETTE=anu_fmc_rdylbu_9&colorscalerange=0,1',
         info: {
           title: '',
           text: ''
@@ -350,6 +358,50 @@ export class MapComponent implements OnInit {
       //   {value: 'hybas_world_lev03_v1c', view_value: 'Global Basins'},
       //   {value: '1030000010', view_value: '1030000010'},
       //   ],
+    },
+
+    zonal_stat_ts_setting: {
+
+      type: 'admin',
+      types: [
+        {value: 'admin', view_value: 'World & Countries'},
+        {value: 'basin', view_value: 'HydroSHD Basins'}
+      ],
+      admin_layer: 'gadm36_0',
+      admin_layers: name_dict.admin,
+      // admin_layers: [
+      //   {value: 'gadm36_0', view_value: 'World'},
+      //   {value: 'AUS', view_value: 'Australia'},
+      //   {value: 'FRA', view_value: 'France'},
+      // ],
+
+      basin_layer: 'hybas_world_lev03_v1c',
+      basin_layer_name: 'World',
+      basin_layers: name_dict.basin,
+      // basin_layers: [
+      //   {value: 'hybas_world_lev03_v1c', view_value: 'Global Basins'},
+      //   {value: '1030000010', view_value: '1030000010'},
+      //   ],
+
+      grid_layer: 'API',
+      grid_layers: [
+        {value: 'API', view_value: 'API analysis'},
+        {value: 'SWI', view_value: 'SWI 1m analysis'},
+        {value: 'Surface Wetness', view_value: 'Wetness from API analysis'},
+      ],
+      plg_id: 1,
+      plg_ids: [
+        {value: 1, view_value: 'State 1'},
+        {value: 2, view_value: 'State 2'},
+      ],
+
+      grid_params: {
+        'API': {},
+        'SWI': {},
+        'Surface Wetness': {},
+
+      }
+
     },
 
     Point_layers: {
@@ -614,13 +666,11 @@ export class MapComponent implements OnInit {
 
     let url_base = this.DAT.WMS_layers_zonal_stat_settings.base;
     let url_feature = null;
-    if (url_base === 'admin'){
+    if (url_base === 'admin') {
       url_feature = this.DAT.WMS_layers_zonal_stat_settings.admin_layer;
     } else {
       url_feature = this.DAT.WMS_layers_zonal_stat_settings.basin_layer;
     }
-
-
 
 
     if (this.DAT.WMS_layers_zonal_stat[layer_name].is_selected) {
@@ -691,6 +741,9 @@ export class MapComponent implements OnInit {
       case 'set_wms_layer_zonal_stat':
         this.set_wms_layer_zonal_stat($event.params.layer_name);
         break;
+      case 'plot_zonal_stat_ts':
+        this.plotZonalStatTs();
+        break;
       case 'set_point_layer':
         this.set_point_layer($event.params.layer_name);
         break;
@@ -701,17 +754,14 @@ export class MapComponent implements OnInit {
 
   pointSelected(layer: string, point: Feature, plot_config) {
     console.log('in pointSelected');
-    console.log(layer);
-    console.log(point);
-    console.log('----------------------');
-
-    console.log('----------------------');
 
     this.pointData.getTimeSeries(layer, point).subscribe(ts => {
       console.log(ts);
 
       this.plotData.sendCmd({
+        plot_app: 'point_plot',
         data: {
+
           layer: layer,
           plot_config: plot_config,
           point: point,
@@ -722,7 +772,57 @@ export class MapComponent implements OnInit {
 
     });
   }
+
+  plotZonalStatTs() {
+    let layer_type = this.DAT.zonal_stat_ts_setting.type;
+
+    let vectorLayer;
+    let region;
+    let grid_layer = this.DAT.zonal_stat_ts_setting.grid_layer;
+    let plg_id = this.DAT.zonal_stat_ts_setting.plg_id;
+
+
+    switch (layer_type) {
+      case 'admin':
+        vectorLayer = 'Admin Boundaries';
+        region = this.DAT.zonal_stat_ts_setting.admin_layer;
+        break;
+      case 'basin':
+        vectorLayer = 'Basins';
+        region = this.DAT.zonal_stat_ts_setting.basin_layer;
+        break;
+      default:
+        break;
+    }
+
+    this.DAT.zonal_stat_ts_setting.plg_ids = row_id_dict[layer_type][region];
+
+    console.log(layer_type, region, grid_layer, plg_id);
+    this.zonalData.getTimeSeries(vectorLayer, grid_layer, {
+        type: 'Feature',
+        geometry: null,
+        properties: {
+          plg_id: plg_id
+        },
+      },
+      { // New parameter
+        region: region,
+      }).subscribe(ts => {
+      console.log('Time series from zonal stats', region, plg_id);
+      console.log(ts);
+
+      this.plotData.sendCmd({
+        plot_app: 'zonal_stat_ts_plot',
+        data: {
+          dates: ts.dates,
+          values: ts.values
+        }
+      });
+
+    });
+
+
+  }
+
+
 }
-
-
-// 20200101

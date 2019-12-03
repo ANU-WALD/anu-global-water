@@ -20,8 +20,20 @@ export class LeftPanelComponent implements OnInit {
       admin_layers: [],
       basin_layer: null,
       basin_layers: [],
-
     },
+    zonal_stat_ts_setting: {
+      type: null,
+      types: [],
+      admin_layer: null,
+      admin_layers: [],
+      basin_layer: null,
+      basin_layers: [],
+      grid_layer: null,
+      grid_layers: [],
+      plg_id: null,
+      plg_ids: [],
+    },
+
   };
   @Output() map_left_panel_event = new EventEmitter<object>();
 

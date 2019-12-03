@@ -18,7 +18,6 @@ export class PlotDataService {
     }
   }
 
-
   constructor() {
   }
 }
