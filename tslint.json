@@ -1,6 +1,11 @@
 {
   "extends": "tslint:recommended",
   "rules": {
+    "whitespace":false,
+    "typedef-whitespace":false,
+    "one-line":false,
+    "comment-format":false,
+    "semicolon":false,
     "array-type": false,
     "arrow-parens": false,
     "deprecation": {
