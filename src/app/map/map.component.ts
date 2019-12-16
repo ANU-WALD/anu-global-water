@@ -6,8 +6,6 @@ import {Feature} from 'geojson';
 import {MetadataService, InterpolationService, PaletteService} from 'map-wald';
 import {PointDataService} from '../point-data.service';
 import {PlotDataService} from '../plot-data.service';
-import {point} from 'leaflet';
-import {map, switchAll} from 'rxjs/operators';
 import {ZonalDataService} from '../zonal-data.service';
 import name_dict from '../../assets/names/name_dict.json';
 import row_id_dict from '../../assets/names/row_id_dict.json';
@@ -495,8 +493,8 @@ export class MapComponent implements OnInit {
     this.OBJ.current_base_layer.addTo(this.OBJ.map);
 
 
-    for (let wms_key in this.DAT.WMS_layers) {
-      let layer_dict = this.DAT.WMS_layers[wms_key];
+    for (const wms_key in this.DAT.WMS_layers) {
+      const layer_dict = this.DAT.WMS_layers[wms_key];
 
       if (!this.OBJ.WMS_layers.hasOwnProperty(layer_dict.group_name)) {
         this.OBJ.WMS_layers[layer_dict.group_name] = {
@@ -515,27 +513,27 @@ export class MapComponent implements OnInit {
     }
 
     // set last date for dynamic layers
-    let today = new Date();
-    let cur_year = today.getFullYear();
-    for (let wms_key in this.DAT.WMS_layers_dynamic) {
+    const today = new Date();
+    const cur_year = today.getFullYear();
+    for (const wms_key in this.DAT.WMS_layers_dynamic) {
 
       this.OBJ.WMS_layers_dynamic[wms_key] = null;
 
-      let layer_dict = this.DAT.WMS_layers_dynamic[wms_key];
-      let wms_url = null;
-      let dods_url = null;
-      let min_year = layer_dict.date_dict.min_year;
+      const layer_dict = this.DAT.WMS_layers_dynamic[wms_key];
+      const wms_url = null;
+      const dods_url = null;
+      const min_year = layer_dict.date_dict.min_year;
       // min date
-      let datesMin$ = this.getDates(layer_dict.wms_url, {
+      const datesMin$ = this.getDates(layer_dict.wms_url, {
         year: min_year
       });
-      let datesMax$ = this.getDates(layer_dict.wms_url, {
+      const datesMax$ = this.getDates(layer_dict.wms_url, {
         year: cur_year
       });
 
       forkJoin([datesMin$, datesMax$]).subscribe(allDates => {
-        let mins = allDates[0];
-        let maxs = allDates[1];
+        const mins = allDates[0];
+        const maxs = allDates[1];
         layer_dict.date_dict.min_date = mins[0];
         layer_dict.date_dict.max_date = maxs[maxs.length - 1];
         layer_dict.date_dict.selected_date = layer_dict.date_dict.max_date;
@@ -544,21 +542,21 @@ export class MapComponent implements OnInit {
     }
 
     // set last date for zonal stat wms layers
-    for (let wms_key in this.DAT.WMS_layers_zonal_stat) {
+    for (const wms_key in this.DAT.WMS_layers_zonal_stat) {
 
       this.OBJ.WMS_layers_zonal_stat[wms_key] = null;
 
-      let layer_dict = this.DAT.WMS_layers_zonal_stat[wms_key];
-      let wms_url = null;
-      let dods_url = null;
-      let min_year = layer_dict.date_dict.min_year;
+      const layer_dict = this.DAT.WMS_layers_zonal_stat[wms_key];
+      const wms_url = null;
+      const dods_url = null;
+      const min_year = layer_dict.date_dict.min_year;
       // min date
-      let datesMin$ = this.getDates(layer_dict.wms_url, {});
+      const datesMin$ = this.getDates(layer_dict.wms_url, {});
 
       forkJoin([datesMin$]).subscribe(allDates => {
-        let datesList = allDates[0];
-        let mins = datesList[0];
-        let maxs = datesList[datesList.length - 1];
+        const datesList = allDates[0];
+        const mins = datesList[0];
+        const maxs = datesList[datesList.length - 1];
         layer_dict.date_dict.min_date = mins;
         layer_dict.date_dict.max_date = maxs;
         layer_dict.date_dict.selected_date = layer_dict.date_dict.max_date;
@@ -566,7 +564,7 @@ export class MapComponent implements OnInit {
     }
 
     // adding point layers to the system
-    for (let layer_key in this.DAT.Point_layers) {
+    for (const layer_key in this.DAT.Point_layers) {
       console.log('layer_key', layer_key);
       const pointLayer = this.DAT.Point_layers[layer_key].layer_display_name; // 'Major streams';
       const plot_config = this.DAT.Point_layers[layer_key].plot_config;
@@ -641,7 +639,7 @@ export class MapComponent implements OnInit {
 
       layer_date = new Date(Date.UTC(layer_date.getFullYear(), layer_date.getMonth(), layer_date.getDate(), 0, 0, 0));
 
-      let wms_url = InterpolationService.interpolate(this.DAT.WMS_layers_dynamic[layer_name].wms_url, {
+      const wms_url = InterpolationService.interpolate(this.DAT.WMS_layers_dynamic[layer_name].wms_url, {
         year: layer_date.getFullYear()
       });
       this.DAT.WMS_layers_dynamic[layer_name].wms_options.time = layer_date.toISOString();
@@ -664,7 +662,7 @@ export class MapComponent implements OnInit {
     console.log(this.DAT.WMS_layers_zonal_stat_settings.base);
     console.log(this.DAT.WMS_layers_zonal_stat_settings.admin_layer);
 
-    let url_base = this.DAT.WMS_layers_zonal_stat_settings.base;
+    const url_base = this.DAT.WMS_layers_zonal_stat_settings.base;
     let url_feature = null;
     if (url_base === 'admin') {
       url_feature = this.DAT.WMS_layers_zonal_stat_settings.admin_layer;
@@ -682,9 +680,9 @@ export class MapComponent implements OnInit {
       let layer_date = this.DAT.WMS_layers_zonal_stat[layer_name].date_dict.selected_date;
 
       layer_date = new Date(Date.UTC(layer_date.getFullYear(), layer_date.getMonth(), layer_date.getDate(), 0, 0, 0));
-      let nc_variable = this.DAT.WMS_layers_zonal_stat[layer_name].nc_variable;
-      let nc_file = this.DAT.WMS_layers_zonal_stat[layer_name].nc_file;
-      let wms_url = this.DAT.WMS_layers_zonal_stat[layer_name].wms_url_base + '/' + url_base + '/' + url_feature + '__' + nc_file + '__' + nc_variable + '.nc';
+      const nc_variable = this.DAT.WMS_layers_zonal_stat[layer_name].nc_variable;
+      const nc_file = this.DAT.WMS_layers_zonal_stat[layer_name].nc_file;
+      const wms_url = this.DAT.WMS_layers_zonal_stat[layer_name].wms_url_base + '/' + url_base + '/' + url_feature + '__' + nc_file + '__' + nc_variable + '.nc';
       console.log(wms_url);
       this.DAT.WMS_layers_zonal_stat[layer_name].wms_options.time = layer_date.toISOString();
 
@@ -706,14 +704,14 @@ export class MapComponent implements OnInit {
     if (this.DAT.Point_layers[layer_name].is_selected) {
       this.DAT.Point_layers[layer_name].show_controls = true;
 
-      for (let lyr_index in this.OBJ.Point_layers[layer_name]) {
+      for (const lyr_index in this.OBJ.Point_layers[layer_name]) {
         this.OBJ.Point_layers[layer_name][lyr_index].addTo(this.OBJ.map);
       }
 
     } else {
 
       this.DAT.Point_layers[layer_name].show_controls = false;
-      for (let lyr_index in this.OBJ.Point_layers[layer_name]) {
+      for (const lyr_index in this.OBJ.Point_layers[layer_name]) {
         this.OBJ.map.removeLayer(this.OBJ.Point_layers[layer_name][lyr_index]);
       }
     }
@@ -761,10 +759,9 @@ export class MapComponent implements OnInit {
       this.plotData.sendCmd({
         plot_app: 'point_plot',
         data: {
-
-          layer: layer,
-          plot_config: plot_config,
-          point: point,
+          layer,
+          plot_config,
+          point,
           dates: ts.dates,
           values: ts.values
         }
@@ -774,12 +771,12 @@ export class MapComponent implements OnInit {
   }
 
   plotZonalStatTs() {
-    let layer_type = this.DAT.zonal_stat_ts_setting.type;
+    const layer_type = this.DAT.zonal_stat_ts_setting.type;
 
     let vectorLayer;
     let region;
-    let grid_layer = this.DAT.zonal_stat_ts_setting.grid_layer;
-    let plg_id = this.DAT.zonal_stat_ts_setting.plg_id;
+    const grid_layer = this.DAT.zonal_stat_ts_setting.grid_layer;
+    const plg_id = this.DAT.zonal_stat_ts_setting.plg_id;
 
 
     switch (layer_type) {
@@ -802,11 +799,11 @@ export class MapComponent implements OnInit {
         type: 'Feature',
         geometry: null,
         properties: {
-          plg_id: plg_id
+          plg_id
         },
       },
       { // New parameter
-        region: region,
+        region,
       }).subscribe(ts => {
       console.log('Time series from zonal stats', region, plg_id);
       console.log(ts);

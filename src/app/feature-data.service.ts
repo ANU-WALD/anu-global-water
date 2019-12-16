@@ -69,8 +69,8 @@ export class FeatureDataService {
   getValues(layer:FeatureDataConfig, filter:{[key:string]:any}, timestep: Date, variable?: string): Observable<FeatureCollection>{
     return this.getFeatures(layer).pipe(
       map((f)=>{
-        let features:FeatureCollection = f;
-        let config:FeatureDataConfig = layer;
+        const features:FeatureCollection = f;
+        const config:FeatureDataConfig = layer;
         variable = variable || config.variables[0];
         return {
           features,
@@ -123,15 +123,15 @@ export class FeatureDataService {
   }
 
   getTimeSeries(layer:FeatureDataConfig,feature:Feature,variable?:string):Observable<TimeSeries>{
-    let res$ = this.getFeatures(layer).pipe(
-      map(f=>{
-        let features:FeatureCollection = f;
-        let config:FeatureDataConfig = layer;
+    const res$ = this.getFeatures(layer).pipe(
+      map(features=>{
+        // const features:FeatureCollection = f;
+        const config:FeatureDataConfig = layer;
         variable = variable || config.variables[0];
         const idCol = layer.id||DEFAULT_ID_COLUMN;
         return {
-          variable: variable,
-          config: config,
+          variable,
+          config,
           idx: features.features.findIndex(f=>f.properties[idCol]===feature.properties[idCol]),
           url: ''
         };
@@ -183,7 +183,7 @@ export class FeatureDataService {
       }),
       switchAll(),
       map(data=>{
-        let result:{[key:string]:number[]} = {};
+        const result:{[key:string]:number[]} = {};
         data.forEach((d,i)=>{
           result[variables[i]] = d[variables[i]] as number[];
         })
@@ -196,7 +196,7 @@ export class FeatureDataService {
         };
 
         result.features = data[idCol].map((_,i)=>{
-          let f: Feature = {
+          const f: Feature = {
             type: 'Feature',
             geometry: null,
             properties:{}

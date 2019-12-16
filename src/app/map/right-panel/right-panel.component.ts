@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {PlotDataService} from '../../plot-data.service';
 import admin_names from '../../../assets/names/admin_names.json';
@@ -53,7 +53,7 @@ export class RightPanelComponent implements OnInit {
 
     this.subscription = this.plotDataService.cmdObservable$.subscribe((res) => {
 
-      let plot_app = res.plot_app;
+      const plot_app = res.plot_app;
       console.log(plot_app);
 
       switch (plot_app) {
@@ -82,22 +82,22 @@ export class RightPanelComponent implements OnInit {
   plotPointData(point_data) {
     this.selected_point = point_data;
 
-    let admin_info = admin_names[this.selected_point.point.properties.admin_country];
+    const admin_info = admin_names[this.selected_point.point.properties.admin_country];
     this.selected_point.info = {
       country_name: admin_info.NAME_0,
       state_name: admin_info.GID_1[this.selected_point.point.properties.admin_province]
     };
 
-    let div_id = 'plotly_ts';
+    const div_id = 'plotly_ts';
 
-    let plot_data = [{
+    const plot_data = [{
       x: point_data.dates,
       y: point_data.values,
     }];
-    let min_date = point_data.dates[0];
-    let max_date = point_data.dates[point_data.dates.length - 1];
+    const min_date = point_data.dates[0];
+    const max_date = point_data.dates[point_data.dates.length - 1];
 
-    let layout = {
+    const layout = {
 
       title: {
         text: point_data.plot_config.plot_title,
@@ -164,16 +164,16 @@ export class RightPanelComponent implements OnInit {
 
   plotZonalStatTs(point_data) {
 
-    let div_id = 'plotly_zst_ts';
+    const div_id = 'plotly_zst_ts';
 
-    let plot_data = [{
+    const plot_data = [{
       x: point_data.dates,
       y: point_data.values,
     }];
-    let min_date = point_data.dates[0];
-    let max_date = point_data.dates[point_data.dates.length - 1];
+    const min_date = point_data.dates[0];
+    const max_date = point_data.dates[point_data.dates.length - 1];
 
-    let layout = {
+    const layout = {
 
       // title: {
       //   text: point_data.plot_config.plot_title,

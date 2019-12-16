@@ -17,7 +17,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule} from '@angular/material/input';
 import {MatNativeDateModule} from '@angular/material/core';
-import {MatSelectModule} from "@angular/material/select";
+import {MatSelectModule} from '@angular/material/select';
 
 import {AppComponent} from './app.component';
 import {MapComponent} from './map/map.component';
@@ -25,7 +25,7 @@ import {MapComponent} from './map/map.component';
 import {FormsModule} from '@angular/forms';
 import {LeftPanelComponent} from './map/left-panel/left-panel.component';
 import {RightPanelComponent} from './map/right-panel/right-panel.component';
-import {HttpClientModule, HttpClient} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
