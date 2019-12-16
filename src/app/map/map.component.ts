@@ -9,6 +9,7 @@ import {PlotDataService} from '../plot-data.service';
 import {ZonalDataService} from '../zonal-data.service';
 import name_dict from '../../assets/names/name_dict.json';
 import row_id_dict from '../../assets/names/row_id_dict.json';
+import { VectorLayerService } from '../vector-layer.service';
 
 @Component({
   selector: 'app-map',
@@ -21,7 +22,8 @@ export class MapComponent implements OnInit {
               private pointData: PointDataService,
               private zonalData: ZonalDataService,
               private plotData: PlotDataService,
-              private palettes: PaletteService) {
+              private palettes: PaletteService,
+              private vectorData: VectorLayerService) {
     // this.pointData.getLayers().subscribe(layers => console.log(layers));
 
     this.zonalData.getVectorLayers().subscribe(layers => console.log(layers));
@@ -492,6 +494,9 @@ export class MapComponent implements OnInit {
     this.OBJ.current_base_layer = this.DAT.mapbox_baseLayers[this.DAT.base_layer_name];
     this.OBJ.current_base_layer.addTo(this.OBJ.map);
 
+    this.vectorData.getLayer('Countries').subscribe(countries=>{
+      L.geoJSON(countries).addTo(this.OBJ.map);
+    });
 
     for (const wms_key in this.DAT.WMS_layers) {
       const layer_dict = this.DAT.WMS_layers[wms_key];
