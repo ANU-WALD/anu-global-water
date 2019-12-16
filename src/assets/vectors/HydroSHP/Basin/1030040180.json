@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"name": "1030040180",
+"features": [
+{ "type": "Feature", "properties": { "HYBAS_ID_l": "1050040180", "NEXT_DOWN_": "0", "NEXT_SINK_": "1050040180", "MAIN_BAS_l": "1050040180", "DIST_SINK_": 0.0, "DIST_MAIN_": 0.0, "SUB_AREA_l": 2.2, "UP_AREA_le": 2.3, "PFAF_ID_le": "18800", "ENDO_left": "0", "COAST_left": "1", "ORDER_left": "0", "SORT_left": "672", "index_righ": "38", "HYBAS_ID_r": "1030040180", "NEXT_DOW_1": "0", "NEXT_SIN_1": "1030040180", "MAIN_BAS_r": "1030040180", "DIST_SIN_1": 0.0, "DIST_MAI_1": 0.0, "SUB_AREA_r": 2.2, "UP_AREA_ri": 2.3, "PFAF_ID_ri": "188", "ENDO_right": "0", "COAST_righ": "1", "ORDER_righ": "0", "SORT_right": "39", "area_km2": 2.3606851960986228 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 54.528, -15.9 ], [ 54.521, -15.899 ], [ 54.516, -15.892 ], [ 54.518, -15.883 ], [ 54.525, -15.884 ], [ 54.533, -15.894 ], [ 54.528, -15.9 ] ] ] } }
+]
+}

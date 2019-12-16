@@ -496,6 +496,10 @@ export class MapComponent implements OnInit {
 
     this.vectorData.getLayer('Countries').subscribe(countries=>{
       L.geoJSON(countries).addTo(this.OBJ.map);
+
+      this.vectorData.getSubLayer('Countries','AUS').subscribe(australia=>{
+        L.geoJSON(australia).addTo(this.OBJ.map);
+      })
     });
 
     for (const wms_key in this.DAT.WMS_layers) {
