@@ -4,10 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 9005",
-    "build": "if [ $BRANCH = 'production' ]; then export PREFIX='/water/'; else export PREFIX='/water/staging/'; fi; npm run build-with-prefix",
+    "build": "npm run lint && if [ $BRANCH = 'production' ]; then export PREFIX='/water/'; else export PREFIX='/water/staging/'; fi; npm run build-with-prefix",
     "build-with-prefix": "echo prefix=$PREFIX && ng build --base-href $PREFIX",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "ng lint --format=verbose",
     "e2e": "ng e2e"
   },
   "private": true,
